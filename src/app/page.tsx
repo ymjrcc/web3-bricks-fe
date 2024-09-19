@@ -21,7 +21,7 @@ function Page() {
       </h1>
       <div className="flex justify-center">
         <Button onClick={() => toast.success('Clicked!')}>Click me</Button>
-      </div>
+      </div> 
     </>
   );
 }
