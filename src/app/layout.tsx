@@ -16,7 +16,7 @@ function RootLayout({ children }: { children: React.ReactNode }) {
         <Providers>
           <div className='h-[100vh] p-4 bg-gray-100 flex'>
             <Sidebar />
-            <div className='flex-1 bg-white border-1 border-gray-200 rounded-2xl overflow-auto'>
+            <div className='flex-1 mt-12 p-4 bg-white border-1 border-gray-200 rounded-2xl overflow-auto'>
               {children}
             </div>
           </div>
