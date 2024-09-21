@@ -6,34 +6,6 @@ import {
 } from 'wagmi/codegen'
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Counter
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-export const counterAbi = [
-  {
-    type: 'function',
-    inputs: [],
-    name: 'increment',
-    outputs: [],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
-    inputs: [],
-    name: 'number',
-    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    inputs: [{ name: 'newNumber', internalType: 'uint256', type: 'uint256' }],
-    name: 'setNumber',
-    outputs: [],
-    stateMutability: 'nonpayable',
-  },
-] as const
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // IMulticall3
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -310,6 +282,13 @@ export const multiSigWalletAbi = [
   },
   {
     type: 'function',
+    inputs: [],
+    name: 'getOwners',
+    outputs: [{ name: '', internalType: 'address[]', type: 'address[]' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
     inputs: [
       { name: '', internalType: 'uint256', type: 'uint256' },
       { name: '', internalType: 'address', type: 'address' },
@@ -456,159 +435,8 @@ export const multiSigWalletAbi = [
 ] as const
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// YourContract
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-export const yourContractAbi = [
-  {
-    type: 'constructor',
-    inputs: [{ name: '_owner', internalType: 'address', type: 'address' }],
-    stateMutability: 'nonpayable',
-  },
-  { type: 'receive', stateMutability: 'payable' },
-  {
-    type: 'function',
-    inputs: [],
-    name: 'greeting',
-    outputs: [{ name: '', internalType: 'string', type: 'string' }],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    inputs: [],
-    name: 'owner',
-    outputs: [{ name: '', internalType: 'address', type: 'address' }],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    inputs: [],
-    name: 'premium',
-    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    inputs: [{ name: '_newGreeting', internalType: 'string', type: 'string' }],
-    name: 'setGreeting',
-    outputs: [],
-    stateMutability: 'payable',
-  },
-  {
-    type: 'function',
-    inputs: [],
-    name: 'totalCounter',
-    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    inputs: [{ name: '', internalType: 'address', type: 'address' }],
-    name: 'userGreetingCounter',
-    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    inputs: [],
-    name: 'withdraw',
-    outputs: [],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'event',
-    anonymous: false,
-    inputs: [
-      {
-        name: 'greetingSetter',
-        internalType: 'address',
-        type: 'address',
-        indexed: true,
-      },
-      {
-        name: 'newGreeting',
-        internalType: 'string',
-        type: 'string',
-        indexed: false,
-      },
-      { name: 'premium', internalType: 'bool', type: 'bool', indexed: false },
-      {
-        name: 'value',
-        internalType: 'uint256',
-        type: 'uint256',
-        indexed: false,
-      },
-    ],
-    name: 'GreetingChange',
-  },
-] as const
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // React
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-/**
- * Wraps __{@link useReadContract}__ with `abi` set to __{@link counterAbi}__
- */
-export const useReadCounter = /*#__PURE__*/ createUseReadContract({
-  abi: counterAbi,
-})
-
-/**
- * Wraps __{@link useReadContract}__ with `abi` set to __{@link counterAbi}__ and `functionName` set to `"number"`
- */
-export const useReadCounterNumber = /*#__PURE__*/ createUseReadContract({
-  abi: counterAbi,
-  functionName: 'number',
-})
-
-/**
- * Wraps __{@link useWriteContract}__ with `abi` set to __{@link counterAbi}__
- */
-export const useWriteCounter = /*#__PURE__*/ createUseWriteContract({
-  abi: counterAbi,
-})
-
-/**
- * Wraps __{@link useWriteContract}__ with `abi` set to __{@link counterAbi}__ and `functionName` set to `"increment"`
- */
-export const useWriteCounterIncrement = /*#__PURE__*/ createUseWriteContract({
-  abi: counterAbi,
-  functionName: 'increment',
-})
-
-/**
- * Wraps __{@link useWriteContract}__ with `abi` set to __{@link counterAbi}__ and `functionName` set to `"setNumber"`
- */
-export const useWriteCounterSetNumber = /*#__PURE__*/ createUseWriteContract({
-  abi: counterAbi,
-  functionName: 'setNumber',
-})
-
-/**
- * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link counterAbi}__
- */
-export const useSimulateCounter = /*#__PURE__*/ createUseSimulateContract({
-  abi: counterAbi,
-})
-
-/**
- * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link counterAbi}__ and `functionName` set to `"increment"`
- */
-export const useSimulateCounterIncrement =
-  /*#__PURE__*/ createUseSimulateContract({
-    abi: counterAbi,
-    functionName: 'increment',
-  })
-
-/**
- * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link counterAbi}__ and `functionName` set to `"setNumber"`
- */
-export const useSimulateCounterSetNumber =
-  /*#__PURE__*/ createUseSimulateContract({
-    abi: counterAbi,
-    functionName: 'setNumber',
-  })
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link iMulticall3Abi}__
@@ -833,6 +661,15 @@ export const useReadMultiSigWallet = /*#__PURE__*/ createUseReadContract({
 })
 
 /**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link multiSigWalletAbi}__ and `functionName` set to `"getOwners"`
+ */
+export const useReadMultiSigWalletGetOwners =
+  /*#__PURE__*/ createUseReadContract({
+    abi: multiSigWalletAbi,
+    functionName: 'getOwners',
+  })
+
+/**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link multiSigWalletAbi}__ and `functionName` set to `"isConfirmed"`
  */
 export const useReadMultiSigWalletIsConfirmed =
@@ -999,118 +836,4 @@ export const useWatchMultiSigWalletTransactionSubmittedEvent =
   /*#__PURE__*/ createUseWatchContractEvent({
     abi: multiSigWalletAbi,
     eventName: 'TransactionSubmitted',
-  })
-
-/**
- * Wraps __{@link useReadContract}__ with `abi` set to __{@link yourContractAbi}__
- */
-export const useReadYourContract = /*#__PURE__*/ createUseReadContract({
-  abi: yourContractAbi,
-})
-
-/**
- * Wraps __{@link useReadContract}__ with `abi` set to __{@link yourContractAbi}__ and `functionName` set to `"greeting"`
- */
-export const useReadYourContractGreeting = /*#__PURE__*/ createUseReadContract({
-  abi: yourContractAbi,
-  functionName: 'greeting',
-})
-
-/**
- * Wraps __{@link useReadContract}__ with `abi` set to __{@link yourContractAbi}__ and `functionName` set to `"owner"`
- */
-export const useReadYourContractOwner = /*#__PURE__*/ createUseReadContract({
-  abi: yourContractAbi,
-  functionName: 'owner',
-})
-
-/**
- * Wraps __{@link useReadContract}__ with `abi` set to __{@link yourContractAbi}__ and `functionName` set to `"premium"`
- */
-export const useReadYourContractPremium = /*#__PURE__*/ createUseReadContract({
-  abi: yourContractAbi,
-  functionName: 'premium',
-})
-
-/**
- * Wraps __{@link useReadContract}__ with `abi` set to __{@link yourContractAbi}__ and `functionName` set to `"totalCounter"`
- */
-export const useReadYourContractTotalCounter =
-  /*#__PURE__*/ createUseReadContract({
-    abi: yourContractAbi,
-    functionName: 'totalCounter',
-  })
-
-/**
- * Wraps __{@link useReadContract}__ with `abi` set to __{@link yourContractAbi}__ and `functionName` set to `"userGreetingCounter"`
- */
-export const useReadYourContractUserGreetingCounter =
-  /*#__PURE__*/ createUseReadContract({
-    abi: yourContractAbi,
-    functionName: 'userGreetingCounter',
-  })
-
-/**
- * Wraps __{@link useWriteContract}__ with `abi` set to __{@link yourContractAbi}__
- */
-export const useWriteYourContract = /*#__PURE__*/ createUseWriteContract({
-  abi: yourContractAbi,
-})
-
-/**
- * Wraps __{@link useWriteContract}__ with `abi` set to __{@link yourContractAbi}__ and `functionName` set to `"setGreeting"`
- */
-export const useWriteYourContractSetGreeting =
-  /*#__PURE__*/ createUseWriteContract({
-    abi: yourContractAbi,
-    functionName: 'setGreeting',
-  })
-
-/**
- * Wraps __{@link useWriteContract}__ with `abi` set to __{@link yourContractAbi}__ and `functionName` set to `"withdraw"`
- */
-export const useWriteYourContractWithdraw =
-  /*#__PURE__*/ createUseWriteContract({
-    abi: yourContractAbi,
-    functionName: 'withdraw',
-  })
-
-/**
- * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link yourContractAbi}__
- */
-export const useSimulateYourContract = /*#__PURE__*/ createUseSimulateContract({
-  abi: yourContractAbi,
-})
-
-/**
- * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link yourContractAbi}__ and `functionName` set to `"setGreeting"`
- */
-export const useSimulateYourContractSetGreeting =
-  /*#__PURE__*/ createUseSimulateContract({
-    abi: yourContractAbi,
-    functionName: 'setGreeting',
-  })
-
-/**
- * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link yourContractAbi}__ and `functionName` set to `"withdraw"`
- */
-export const useSimulateYourContractWithdraw =
-  /*#__PURE__*/ createUseSimulateContract({
-    abi: yourContractAbi,
-    functionName: 'withdraw',
-  })
-
-/**
- * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link yourContractAbi}__
- */
-export const useWatchYourContractEvent =
-  /*#__PURE__*/ createUseWatchContractEvent({ abi: yourContractAbi })
-
-/**
- * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link yourContractAbi}__ and `eventName` set to `"GreetingChange"`
- */
-export const useWatchYourContractGreetingChangeEvent =
-  /*#__PURE__*/ createUseWatchContractEvent({
-    abi: yourContractAbi,
-    eventName: 'GreetingChange',
   })
