@@ -1,60 +1,35 @@
 'use client'
 
-import { Button, Input, Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, getKeyValue, Code } from "@nextui-org/react"
+import {
+  Button, Input, Code,
+  Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, getKeyValue,
+  Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure
+} from "@nextui-org/react"
 import { useReadMultiSigWallet, useWriteMultiSigWallet } from "@/utils/contracts";
 import { useAccount, useBalance, useWaitForTransactionReceipt } from "wagmi";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import toast from "react-hot-toast";
+import { stringToHex } from 'viem'
+import clsx from "clsx";
 
-const contractAddress = '0x5FbDB2315678afecb367f032d93F642f64180aa3'
-
-const rows = [
-  {
-    key: "1",
-    hash: "Tony Reichert",
-    to: "CEO",
-    value: "Active",
-    confirmed: "4/5"
-  },
-  {
-    key: "2",
-    hash: "Zoey Lang",
-    to: "Technical Lead",
-    value: "Paused",
-    confirmed: "4/5"
-  },
-  {
-    key: "3",
-    hash: "Jane Fisher",
-    to: "Senior Developer",
-    value: "Active",
-    confirmed: "4/5"
-  },
-  {
-    key: "4",
-    hash: "William Howard",
-    to: "Community Manager",
-    value: "Vacation",
-    confirmed: "4/5"
-  },
-];
+const contractAddress = '0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512'
 
 const columns = [
   {
-    key: "hash",
-    label: "Transation Hash",
-  },
-  {
-    key: "to",
-    label: "To",
+    key: "destination",
+    label: "Destination",
   },
   {
     key: "value",
     label: "Value",
   },
   {
-    key: "confirmed",
-    label: "Confirmed",
+    key: "confirmations",
+    label: "Confirmations",
+  },
+  {
+    key: "executed",
+    label: "Executed",
   },
   {
     key: "actions",
@@ -63,12 +38,14 @@ const columns = [
 ];
 
 const Page = () => {
-
-  const { address } = useAccount() 
-
+  const [destination, setDestination] = useState<any>('')
+  const [currentAction, setCurrentAction] = useState('')
+  const [value, setValue] = useState<any>('')
+  const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
+  const { address } = useAccount()
   const { data: hash, writeContractAsync: writeMultiSigWallet, isPending } = useWriteMultiSigWallet()
-
   const { isLoading, isSuccess } = useWaitForTransactionReceipt({ hash });
+  const { data: balance, refetch: refetchBalance } = useBalance({ address: contractAddress })
 
   const { data: ownersCountForConfirmation } = useReadMultiSigWallet({
     address: contractAddress,
@@ -80,23 +57,38 @@ const Page = () => {
     functionName: 'getOwners'
   })
 
-  const { data: balance, refetch: refetchBalance } = useBalance({ address: contractAddress })
+  const { data: transactions, refetch: refetchTransactions } = useReadMultiSigWallet({
+    address: contractAddress,
+    functionName: 'getTransactions'
+  })
+
+  const rows = useMemo(() => {
+    if (!transactions) return []
+    return transactions.map((item, index) => ({
+      ...item,
+      txId: index,
+      value: Number(item.value / BigInt(10 ** 18)),
+      confirmations: Number(item.confirmations),
+      executed: item.executed ? 'Yes' : 'No'
+    }))
+  }, [transactions])
 
   const balanceFormatted = useMemo(() => {
-    if(!balance?.value) return '0'
+    if (!balance?.value) return '0'
     return Number(balance.value / BigInt(10 ** 18)).toFixed(3)
   }, [balance])
 
   const isOwner = useMemo(() => {
-    if(!address || !owners) return false
+    if (!address || !owners) return false
     return owners.includes(address)
   }, [owners, address])
 
   const onWithdraw = async () => {
+    setCurrentAction('withdraw')
     await writeMultiSigWallet({
       address: contractAddress,
       functionName: 'withdraw',
-    },{
+    }, {
       onError: (error) => {
         toast.error(error.message, {
           style: {
@@ -106,7 +98,73 @@ const Page = () => {
       }
     })
   }
-  
+
+  const onSubmit = async () => {
+    setCurrentAction('submit')
+    await writeMultiSigWallet({
+      address: contractAddress,
+      functionName: 'submitTransaction',
+      args: [destination, BigInt(Number(value) * 10 ** 18), stringToHex('')]
+    }, {
+      onError: (error) => {
+        toast.error(error.message, {
+          style: {
+            wordBreak: 'break-all'
+          }
+        })
+      },
+      onSuccess: () => {
+        setDestination('')
+        setValue('')
+        toast.success('Submit successfully!')
+        onClose()
+        refetchTransactions()
+      }
+    })
+  }
+
+  const onConfirm = async (txId: number) => {
+    setCurrentAction('confirm')
+    await writeMultiSigWallet({
+      address: contractAddress,
+      functionName: 'confirmTransaction',
+      args: [BigInt(txId)]
+    }, {
+      onError: (error) => {
+        toast.error(error.message, {
+          style: {
+            wordBreak: 'break-all'
+          }
+        })
+      },
+      onSuccess: () => {
+        toast.success('Confirm successfully!')
+        refetchTransactions()
+      }
+    })
+  }
+
+  const onExecute = async (txId: number) => {
+    setCurrentAction('execute')
+    await writeMultiSigWallet({
+      address: contractAddress,
+      functionName: 'executeTransaction',
+      args: [BigInt(txId)]
+    }, {
+      onError: (error) => {
+        toast.error(error.message, {
+          style: {
+            wordBreak: 'break-all'
+          }
+        })
+      },
+      onSuccess: () => {
+        toast.success('Execute successfully!')
+        refetchTransactions()
+      }
+    })
+  }
+
   useEffect(() => {
     isSuccess && refetchBalance()
   }, [isSuccess])
@@ -136,8 +194,8 @@ const Page = () => {
         <ul className="list-disc ml-6">
           {
             owners?.map((owner, index) => (
-              <li key={index} className="mt-2">
-                <Code>{owner}</Code>
+              <li key={index}>
+                <Code className={clsx("mt-2", owner === address && 'border-2 border-orange-400')}>{owner} {owner === address && '(current)'}</Code>
               </li>
             ))
           }
@@ -158,22 +216,26 @@ const Page = () => {
             isReadOnly
             label="Balance"
             variant="bordered"
-            value={balanceFormatted }
+            value={balanceFormatted}
             size="sm"
             className="max-w-xs mr-4"
           />
 
-          <Button 
-            color="primary" variant="flat" 
+          <Button
+            color="primary" variant="flat"
             isDisabled={!isOwner}
-            isLoading={isPending || isLoading }
-            onClick={onWithdraw} 
+            isLoading={currentAction==='withdraw' && (isPending || isLoading)}
+            onClick={onWithdraw}
           >
             Withdraw
           </Button>
 
         </div>
-        <Button color="primary" variant="flat" className="ml-4" isDisabled={!isOwner}>
+        <Button
+          color="primary" variant="flat" className="ml-4"
+          isDisabled={!isOwner}
+          onClick={onOpen}
+        >
           Submit New Transaction
         </Button>
 
@@ -184,22 +246,98 @@ const Page = () => {
         <TableHeader columns={columns}>
           {(column) => <TableColumn key={column.key}>{column.label}</TableColumn>}
         </TableHeader>
-        <TableBody items={rows}>
+        {/* <TableBody items={rows}>
           {(item) => (
-            <TableRow key={item.key}>
+            <TableRow key={item.txId}>
               {(columnKey) => {
-                if(columnKey === 'actions') {
+                if (columnKey === 'actions') {
                   return <TableCell>
-                    <Button size="sm" color="warning" variant="flat" isDisabled={!isOwner}>Confirm</Button>
-                    <Button size="sm" color="success" variant="flat" className="ml-2" isDisabled={!isOwner}>Execute</Button>
+                    <Button 
+                      size="sm" color="warning" variant="flat" 
+                      onClick={() => onConfirm(item.txId)}
+                    >Confirm</Button>
+                    <Button 
+                      size="sm" color="success" variant="flat" className="ml-2"
+                      onClick={() => onExecute(item.txId)}
+                    >Execute</Button>
                   </TableCell>
                 }
                 return <TableCell>{getKeyValue(item, columnKey)}</TableCell>
               }}
             </TableRow>
           )}
+        </TableBody> */}
+        <TableBody>
+          {
+            rows.map((item) => (
+              <TableRow key={item.txId}>
+                <TableCell>
+                  <Code>{item.destination}</Code>
+                </TableCell>
+                <TableCell>{item.value}</TableCell>
+                <TableCell 
+                  className={clsx(item.confirmations >= Number(ownersCountForConfirmation) && 'text-orange-500 font-bold')}
+                >{item.confirmations} / {owners?.length}</TableCell>
+                <TableCell className={clsx(item.executed == 'Yes' && 'text-green-500 font-bold')}>{item.executed}</TableCell>
+                {
+                  item.executed==='No' ? (
+                    <TableCell>
+                      <Button
+                        size="sm" color="warning" variant="flat"
+                        isLoading={currentAction==='confirm' && (isPending || isLoading)}
+                        isDisabled={ !isOwner }
+                        onClick={() => onConfirm(item.txId)}
+                      >Confirm</Button>
+                      <Button
+                        size="sm" color="success" variant="flat" className="ml-2"
+                        isLoading={currentAction==='execute' && (isPending || isLoading)}
+                        isDisabled={ !isOwner }
+                        onClick={() => onExecute(item.txId)}
+                      >Execute</Button>
+                    </TableCell>
+                  ) : <TableCell>-</TableCell>
+                }
+              </TableRow>
+            ))
+          }
         </TableBody>
       </Table>
+
+      <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader className="flex flex-col gap-1">Submit New Transaction</ModalHeader>
+              <ModalBody>
+                <Input
+                  label="Address of destination"
+                  value={destination}
+                  onChange={(e) => setDestination(e.target.value)}
+                />
+                <Input
+                  label="Value of ETH"
+                  type="number"
+                  value={value}
+                  onChange={(e) => setValue(e.target.value)}
+                />
+              </ModalBody>
+              <ModalFooter>
+                <Button color="danger" variant="light" onPress={onClose}>
+                  Close
+                </Button>
+                <Button
+                  color="primary"
+                  onPress={onSubmit}
+                  isDisabled={!value || destination.length !== 42}
+                  isLoading={currentAction==='submit' && (isPending || isLoading)}
+                >
+                  Submit
+                </Button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
     </>
   )
 }

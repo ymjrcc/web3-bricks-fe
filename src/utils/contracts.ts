@@ -249,6 +249,238 @@ export const iMulticall3Abi = [
 ] as const
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// M
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+export const mAbi = [
+  {
+    type: 'constructor',
+    inputs: [
+      { name: '_owners', internalType: 'address[]', type: 'address[]' },
+      {
+        name: '_numConfirmationsRequired',
+        internalType: 'uint256',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'nonpayable',
+  },
+  { type: 'receive', stateMutability: 'payable' },
+  {
+    type: 'function',
+    inputs: [{ name: '_txIndex', internalType: 'uint256', type: 'uint256' }],
+    name: 'confirmTransaction',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: '_txIndex', internalType: 'uint256', type: 'uint256' }],
+    name: 'executeTransaction',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'getOwners',
+    outputs: [{ name: '', internalType: 'address[]', type: 'address[]' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: '_txIndex', internalType: 'uint256', type: 'uint256' }],
+    name: 'getTransaction',
+    outputs: [
+      { name: 'to', internalType: 'address', type: 'address' },
+      { name: 'value', internalType: 'uint256', type: 'uint256' },
+      { name: 'data', internalType: 'bytes', type: 'bytes' },
+      { name: 'executed', internalType: 'bool', type: 'bool' },
+      { name: 'numConfirmations', internalType: 'uint256', type: 'uint256' },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'getTransactionCount',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: '', internalType: 'uint256', type: 'uint256' },
+      { name: '', internalType: 'address', type: 'address' },
+    ],
+    name: 'isConfirmed',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: '', internalType: 'address', type: 'address' }],
+    name: 'isOwner',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'numConfirmationsRequired',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    name: 'owners',
+    outputs: [{ name: '', internalType: 'address', type: 'address' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: '_txIndex', internalType: 'uint256', type: 'uint256' }],
+    name: 'revokeConfirmation',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: '_to', internalType: 'address', type: 'address' },
+      { name: '_value', internalType: 'uint256', type: 'uint256' },
+      { name: '_data', internalType: 'bytes', type: 'bytes' },
+    ],
+    name: 'submitTransaction',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    name: 'transactions',
+    outputs: [
+      { name: 'to', internalType: 'address', type: 'address' },
+      { name: 'value', internalType: 'uint256', type: 'uint256' },
+      { name: 'data', internalType: 'bytes', type: 'bytes' },
+      { name: 'executed', internalType: 'bool', type: 'bool' },
+      { name: 'numConfirmations', internalType: 'uint256', type: 'uint256' },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'owner',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+      {
+        name: 'txIndex',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: true,
+      },
+    ],
+    name: 'ConfirmTransaction',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'sender',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+      {
+        name: 'amount',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+      {
+        name: 'balance',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+    ],
+    name: 'Deposit',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'owner',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+      {
+        name: 'txIndex',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: true,
+      },
+    ],
+    name: 'ExecuteTransaction',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'owner',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+      {
+        name: 'txIndex',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: true,
+      },
+    ],
+    name: 'RevokeConfirmation',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'owner',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+      {
+        name: 'txIndex',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: true,
+      },
+      { name: 'to', internalType: 'address', type: 'address', indexed: true },
+      {
+        name: 'value',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+      { name: 'data', internalType: 'bytes', type: 'bytes', indexed: false },
+    ],
+    name: 'SubmitTransaction',
+  },
+] as const
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // MultiSigWallet
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -285,6 +517,26 @@ export const multiSigWalletAbi = [
     inputs: [],
     name: 'getOwners',
     outputs: [{ name: '', internalType: 'address[]', type: 'address[]' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'getTransactions',
+    outputs: [
+      {
+        name: '',
+        internalType: 'struct MultiSigWallet.Transaction[]',
+        type: 'tuple[]',
+        components: [
+          { name: 'executed', internalType: 'bool', type: 'bool' },
+          { name: 'confirmations', internalType: 'uint128', type: 'uint128' },
+          { name: 'destination', internalType: 'address', type: 'address' },
+          { name: 'value', internalType: 'uint256', type: 'uint256' },
+          { name: 'data', internalType: 'bytes', type: 'bytes' },
+        ],
+      },
+    ],
     stateMutability: 'view',
   },
   {
@@ -335,7 +587,7 @@ export const multiSigWalletAbi = [
     name: 'transactions',
     outputs: [
       { name: 'executed', internalType: 'bool', type: 'bool' },
-      { name: 'Confirmations', internalType: 'uint128', type: 'uint128' },
+      { name: 'confirmations', internalType: 'uint128', type: 'uint128' },
       { name: 'destination', internalType: 'address', type: 'address' },
       { name: 'value', internalType: 'uint256', type: 'uint256' },
       { name: 'data', internalType: 'bytes', type: 'bytes' },
@@ -654,6 +906,204 @@ export const useSimulateIMulticall3TryBlockAndAggregate =
   })
 
 /**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link mAbi}__
+ */
+export const useReadM = /*#__PURE__*/ createUseReadContract({ abi: mAbi })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link mAbi}__ and `functionName` set to `"getOwners"`
+ */
+export const useReadMGetOwners = /*#__PURE__*/ createUseReadContract({
+  abi: mAbi,
+  functionName: 'getOwners',
+})
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link mAbi}__ and `functionName` set to `"getTransaction"`
+ */
+export const useReadMGetTransaction = /*#__PURE__*/ createUseReadContract({
+  abi: mAbi,
+  functionName: 'getTransaction',
+})
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link mAbi}__ and `functionName` set to `"getTransactionCount"`
+ */
+export const useReadMGetTransactionCount = /*#__PURE__*/ createUseReadContract({
+  abi: mAbi,
+  functionName: 'getTransactionCount',
+})
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link mAbi}__ and `functionName` set to `"isConfirmed"`
+ */
+export const useReadMIsConfirmed = /*#__PURE__*/ createUseReadContract({
+  abi: mAbi,
+  functionName: 'isConfirmed',
+})
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link mAbi}__ and `functionName` set to `"isOwner"`
+ */
+export const useReadMIsOwner = /*#__PURE__*/ createUseReadContract({
+  abi: mAbi,
+  functionName: 'isOwner',
+})
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link mAbi}__ and `functionName` set to `"numConfirmationsRequired"`
+ */
+export const useReadMNumConfirmationsRequired =
+  /*#__PURE__*/ createUseReadContract({
+    abi: mAbi,
+    functionName: 'numConfirmationsRequired',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link mAbi}__ and `functionName` set to `"owners"`
+ */
+export const useReadMOwners = /*#__PURE__*/ createUseReadContract({
+  abi: mAbi,
+  functionName: 'owners',
+})
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link mAbi}__ and `functionName` set to `"transactions"`
+ */
+export const useReadMTransactions = /*#__PURE__*/ createUseReadContract({
+  abi: mAbi,
+  functionName: 'transactions',
+})
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link mAbi}__
+ */
+export const useWriteM = /*#__PURE__*/ createUseWriteContract({ abi: mAbi })
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link mAbi}__ and `functionName` set to `"confirmTransaction"`
+ */
+export const useWriteMConfirmTransaction = /*#__PURE__*/ createUseWriteContract(
+  { abi: mAbi, functionName: 'confirmTransaction' },
+)
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link mAbi}__ and `functionName` set to `"executeTransaction"`
+ */
+export const useWriteMExecuteTransaction = /*#__PURE__*/ createUseWriteContract(
+  { abi: mAbi, functionName: 'executeTransaction' },
+)
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link mAbi}__ and `functionName` set to `"revokeConfirmation"`
+ */
+export const useWriteMRevokeConfirmation = /*#__PURE__*/ createUseWriteContract(
+  { abi: mAbi, functionName: 'revokeConfirmation' },
+)
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link mAbi}__ and `functionName` set to `"submitTransaction"`
+ */
+export const useWriteMSubmitTransaction = /*#__PURE__*/ createUseWriteContract({
+  abi: mAbi,
+  functionName: 'submitTransaction',
+})
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link mAbi}__
+ */
+export const useSimulateM = /*#__PURE__*/ createUseSimulateContract({
+  abi: mAbi,
+})
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link mAbi}__ and `functionName` set to `"confirmTransaction"`
+ */
+export const useSimulateMConfirmTransaction =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: mAbi,
+    functionName: 'confirmTransaction',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link mAbi}__ and `functionName` set to `"executeTransaction"`
+ */
+export const useSimulateMExecuteTransaction =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: mAbi,
+    functionName: 'executeTransaction',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link mAbi}__ and `functionName` set to `"revokeConfirmation"`
+ */
+export const useSimulateMRevokeConfirmation =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: mAbi,
+    functionName: 'revokeConfirmation',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link mAbi}__ and `functionName` set to `"submitTransaction"`
+ */
+export const useSimulateMSubmitTransaction =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: mAbi,
+    functionName: 'submitTransaction',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link mAbi}__
+ */
+export const useWatchMEvent = /*#__PURE__*/ createUseWatchContractEvent({
+  abi: mAbi,
+})
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link mAbi}__ and `eventName` set to `"ConfirmTransaction"`
+ */
+export const useWatchMConfirmTransactionEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: mAbi,
+    eventName: 'ConfirmTransaction',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link mAbi}__ and `eventName` set to `"Deposit"`
+ */
+export const useWatchMDepositEvent = /*#__PURE__*/ createUseWatchContractEvent({
+  abi: mAbi,
+  eventName: 'Deposit',
+})
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link mAbi}__ and `eventName` set to `"ExecuteTransaction"`
+ */
+export const useWatchMExecuteTransactionEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: mAbi,
+    eventName: 'ExecuteTransaction',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link mAbi}__ and `eventName` set to `"RevokeConfirmation"`
+ */
+export const useWatchMRevokeConfirmationEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: mAbi,
+    eventName: 'RevokeConfirmation',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link mAbi}__ and `eventName` set to `"SubmitTransaction"`
+ */
+export const useWatchMSubmitTransactionEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: mAbi,
+    eventName: 'SubmitTransaction',
+  })
+
+/**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link multiSigWalletAbi}__
  */
 export const useReadMultiSigWallet = /*#__PURE__*/ createUseReadContract({
@@ -667,6 +1117,15 @@ export const useReadMultiSigWalletGetOwners =
   /*#__PURE__*/ createUseReadContract({
     abi: multiSigWalletAbi,
     functionName: 'getOwners',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link multiSigWalletAbi}__ and `functionName` set to `"getTransactions"`
+ */
+export const useReadMultiSigWalletGetTransactions =
+  /*#__PURE__*/ createUseReadContract({
+    abi: multiSigWalletAbi,
+    functionName: 'getTransactions',
   })
 
 /**
