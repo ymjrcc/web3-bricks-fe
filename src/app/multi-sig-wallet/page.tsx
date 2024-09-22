@@ -12,7 +12,13 @@ import toast from "react-hot-toast";
 import { stringToHex } from 'viem'
 import clsx from "clsx";
 
-const contractAddress = '0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512'
+const contractAddress = '0xf5Fba73AcABE9267Bc406364CE0d3AF4dc13fe31'
+
+const info = [
+  { key: 'Name', value: 'Multi-Sig Wallet' },
+  { key: 'Description', value: 'This is a Multi-Sig Wallet DApp.' },
+  { key: 'Contract Address', value: contractAddress, href: `https://sepolia.etherscan.io/address/${contractAddress}` },
+]
 
 const columns = [
   {
@@ -67,7 +73,7 @@ const Page = () => {
     return transactions.map((item, index) => ({
       ...item,
       txId: index,
-      value: Number(item.value / BigInt(10 ** 18)),
+      value: (Number(item.value) / 10 ** 18),
       confirmations: Number(item.confirmations),
       executed: item.executed ? 'Yes' : 'No'
     }))
@@ -75,7 +81,7 @@ const Page = () => {
 
   const balanceFormatted = useMemo(() => {
     if (!balance?.value) return '0'
-    return Number(balance.value / BigInt(10 ** 18)).toFixed(3)
+    return String(Number(balance.value) / 10 ** 18)
   }, [balance])
 
   const isOwner = useMemo(() => {
@@ -116,9 +122,8 @@ const Page = () => {
       onSuccess: () => {
         setDestination('')
         setValue('')
-        toast.success('Submit successfully!')
+        toast.loading('Submiting... Please wait for a moment')
         onClose()
-        refetchTransactions()
       }
     })
   }
@@ -138,8 +143,7 @@ const Page = () => {
         })
       },
       onSuccess: () => {
-        toast.success('Confirm successfully!')
-        refetchTransactions()
+        toast.loading('Confirming... Please wait for a moment')
       }
     })
   }
@@ -159,31 +163,32 @@ const Page = () => {
         })
       },
       onSuccess: () => {
-        toast.success('Execute successfully!')
-        refetchTransactions()
+        toast.loading('Executing... Please wait for a moment')
       }
     })
   }
 
   useEffect(() => {
-    isSuccess && refetchBalance()
+    if(isSuccess) {
+      refetchBalance()
+      refetchTransactions()
+      toast.remove()
+      toast.success('The data was updated successfully!')
+    }
   }, [isSuccess])
 
-  const info = [
-    { key: 'Name', value: 'Multi-Sig Wallet' },
-    { key: 'Description', value: 'This is a Multi-Sig Wallet' },
-    { key: 'Contract Address', value: contractAddress },
-    { key: 'Source Code', value: 'https://github.com' },
-
-  ]
   return (
     <>
       <ul className="bg-gray-50 rounded-xl px-4 py-2 mb-4">
         {
-          info.map(({ key, value }) => (
+          info.map(({ key, value, href }) => (
             <li key={key} className="border-b border-gray-100 flex mb-2">
               <div className="w-40 text-gray-400">{key}</div>
-              <div className="flex-1">{value}</div>
+              {
+                href ? 
+                  <a href={href} target="_blank" className="flex-1 text-blue-600 underline underline-offset-2">{value}</a> :
+                  <div className="flex-1">{value}</div>
+              }
             </li>
           ))
         }
@@ -246,27 +251,6 @@ const Page = () => {
         <TableHeader columns={columns}>
           {(column) => <TableColumn key={column.key}>{column.label}</TableColumn>}
         </TableHeader>
-        {/* <TableBody items={rows}>
-          {(item) => (
-            <TableRow key={item.txId}>
-              {(columnKey) => {
-                if (columnKey === 'actions') {
-                  return <TableCell>
-                    <Button 
-                      size="sm" color="warning" variant="flat" 
-                      onClick={() => onConfirm(item.txId)}
-                    >Confirm</Button>
-                    <Button 
-                      size="sm" color="success" variant="flat" className="ml-2"
-                      onClick={() => onExecute(item.txId)}
-                    >Execute</Button>
-                  </TableCell>
-                }
-                return <TableCell>{getKeyValue(item, columnKey)}</TableCell>
-              }}
-            </TableRow>
-          )}
-        </TableBody> */}
         <TableBody>
           {
             rows.map((item) => (
@@ -282,18 +266,20 @@ const Page = () => {
                 {
                   item.executed==='No' ? (
                     <TableCell>
-                      <Button
-                        size="sm" color="warning" variant="flat"
-                        isLoading={currentAction==='confirm' && (isPending || isLoading)}
-                        isDisabled={ !isOwner }
-                        onClick={() => onConfirm(item.txId)}
-                      >Confirm</Button>
-                      <Button
-                        size="sm" color="success" variant="flat" className="ml-2"
-                        isLoading={currentAction==='execute' && (isPending || isLoading)}
-                        isDisabled={ !isOwner }
-                        onClick={() => onExecute(item.txId)}
-                      >Execute</Button>
+                      <div className="flex items-center">
+                        <Button
+                          size="sm" color="warning" variant="flat"
+                          isLoading={currentAction==='confirm' && (isPending || isLoading)}
+                          isDisabled={ !isOwner }
+                          onClick={() => onConfirm(item.txId)}
+                        >Confirm</Button>
+                        <Button
+                          size="sm" color="success" variant="flat" className="ml-2"
+                          isLoading={currentAction==='execute' && (isPending || isLoading)}
+                          isDisabled={ !isOwner }
+                          onClick={() => onExecute(item.txId)}
+                        >Execute</Button>
+                      </div>
                     </TableCell>
                   ) : <TableCell>-</TableCell>
                 }
