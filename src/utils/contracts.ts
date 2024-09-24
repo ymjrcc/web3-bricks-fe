@@ -6,6 +6,442 @@ import {
 } from 'wagmi/codegen'
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// ERC20
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+export const erc20Abi = [
+  {
+    type: 'function',
+    inputs: [
+      { name: 'owner', internalType: 'address', type: 'address' },
+      { name: 'spender', internalType: 'address', type: 'address' },
+    ],
+    name: 'allowance',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'spender', internalType: 'address', type: 'address' },
+      { name: 'value', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'approve',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'account', internalType: 'address', type: 'address' }],
+    name: 'balanceOf',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'decimals',
+    outputs: [{ name: '', internalType: 'uint8', type: 'uint8' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'name',
+    outputs: [{ name: '', internalType: 'string', type: 'string' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'symbol',
+    outputs: [{ name: '', internalType: 'string', type: 'string' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'totalSupply',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'to', internalType: 'address', type: 'address' },
+      { name: 'value', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'transfer',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'from', internalType: 'address', type: 'address' },
+      { name: 'to', internalType: 'address', type: 'address' },
+      { name: 'value', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'transferFrom',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'owner',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+      {
+        name: 'spender',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+      {
+        name: 'value',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+    ],
+    name: 'Approval',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      { name: 'from', internalType: 'address', type: 'address', indexed: true },
+      { name: 'to', internalType: 'address', type: 'address', indexed: true },
+      {
+        name: 'value',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+    ],
+    name: 'Transfer',
+  },
+  {
+    type: 'error',
+    inputs: [
+      { name: 'spender', internalType: 'address', type: 'address' },
+      { name: 'allowance', internalType: 'uint256', type: 'uint256' },
+      { name: 'needed', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'ERC20InsufficientAllowance',
+  },
+  {
+    type: 'error',
+    inputs: [
+      { name: 'sender', internalType: 'address', type: 'address' },
+      { name: 'balance', internalType: 'uint256', type: 'uint256' },
+      { name: 'needed', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'ERC20InsufficientBalance',
+  },
+  {
+    type: 'error',
+    inputs: [{ name: 'approver', internalType: 'address', type: 'address' }],
+    name: 'ERC20InvalidApprover',
+  },
+  {
+    type: 'error',
+    inputs: [{ name: 'receiver', internalType: 'address', type: 'address' }],
+    name: 'ERC20InvalidReceiver',
+  },
+  {
+    type: 'error',
+    inputs: [{ name: 'sender', internalType: 'address', type: 'address' }],
+    name: 'ERC20InvalidSender',
+  },
+  {
+    type: 'error',
+    inputs: [{ name: 'spender', internalType: 'address', type: 'address' }],
+    name: 'ERC20InvalidSpender',
+  },
+] as const
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// IERC1155Errors
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+export const ierc1155ErrorsAbi = [
+  {
+    type: 'error',
+    inputs: [
+      { name: 'sender', internalType: 'address', type: 'address' },
+      { name: 'balance', internalType: 'uint256', type: 'uint256' },
+      { name: 'needed', internalType: 'uint256', type: 'uint256' },
+      { name: 'tokenId', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'ERC1155InsufficientBalance',
+  },
+  {
+    type: 'error',
+    inputs: [{ name: 'approver', internalType: 'address', type: 'address' }],
+    name: 'ERC1155InvalidApprover',
+  },
+  {
+    type: 'error',
+    inputs: [
+      { name: 'idsLength', internalType: 'uint256', type: 'uint256' },
+      { name: 'valuesLength', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'ERC1155InvalidArrayLength',
+  },
+  {
+    type: 'error',
+    inputs: [{ name: 'operator', internalType: 'address', type: 'address' }],
+    name: 'ERC1155InvalidOperator',
+  },
+  {
+    type: 'error',
+    inputs: [{ name: 'receiver', internalType: 'address', type: 'address' }],
+    name: 'ERC1155InvalidReceiver',
+  },
+  {
+    type: 'error',
+    inputs: [{ name: 'sender', internalType: 'address', type: 'address' }],
+    name: 'ERC1155InvalidSender',
+  },
+  {
+    type: 'error',
+    inputs: [
+      { name: 'operator', internalType: 'address', type: 'address' },
+      { name: 'owner', internalType: 'address', type: 'address' },
+    ],
+    name: 'ERC1155MissingApprovalForAll',
+  },
+] as const
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// IERC20Errors
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+export const ierc20ErrorsAbi = [
+  {
+    type: 'error',
+    inputs: [
+      { name: 'spender', internalType: 'address', type: 'address' },
+      { name: 'allowance', internalType: 'uint256', type: 'uint256' },
+      { name: 'needed', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'ERC20InsufficientAllowance',
+  },
+  {
+    type: 'error',
+    inputs: [
+      { name: 'sender', internalType: 'address', type: 'address' },
+      { name: 'balance', internalType: 'uint256', type: 'uint256' },
+      { name: 'needed', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'ERC20InsufficientBalance',
+  },
+  {
+    type: 'error',
+    inputs: [{ name: 'approver', internalType: 'address', type: 'address' }],
+    name: 'ERC20InvalidApprover',
+  },
+  {
+    type: 'error',
+    inputs: [{ name: 'receiver', internalType: 'address', type: 'address' }],
+    name: 'ERC20InvalidReceiver',
+  },
+  {
+    type: 'error',
+    inputs: [{ name: 'sender', internalType: 'address', type: 'address' }],
+    name: 'ERC20InvalidSender',
+  },
+  {
+    type: 'error',
+    inputs: [{ name: 'spender', internalType: 'address', type: 'address' }],
+    name: 'ERC20InvalidSpender',
+  },
+] as const
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// IERC20Metadata
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+export const ierc20MetadataAbi = [
+  {
+    type: 'function',
+    inputs: [
+      { name: 'owner', internalType: 'address', type: 'address' },
+      { name: 'spender', internalType: 'address', type: 'address' },
+    ],
+    name: 'allowance',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'spender', internalType: 'address', type: 'address' },
+      { name: 'value', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'approve',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'account', internalType: 'address', type: 'address' }],
+    name: 'balanceOf',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'decimals',
+    outputs: [{ name: '', internalType: 'uint8', type: 'uint8' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'name',
+    outputs: [{ name: '', internalType: 'string', type: 'string' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'symbol',
+    outputs: [{ name: '', internalType: 'string', type: 'string' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'totalSupply',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'to', internalType: 'address', type: 'address' },
+      { name: 'value', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'transfer',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'from', internalType: 'address', type: 'address' },
+      { name: 'to', internalType: 'address', type: 'address' },
+      { name: 'value', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'transferFrom',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'owner',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+      {
+        name: 'spender',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+      {
+        name: 'value',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+    ],
+    name: 'Approval',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      { name: 'from', internalType: 'address', type: 'address', indexed: true },
+      { name: 'to', internalType: 'address', type: 'address', indexed: true },
+      {
+        name: 'value',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+    ],
+    name: 'Transfer',
+  },
+] as const
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// IERC721Errors
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+export const ierc721ErrorsAbi = [
+  {
+    type: 'error',
+    inputs: [
+      { name: 'sender', internalType: 'address', type: 'address' },
+      { name: 'tokenId', internalType: 'uint256', type: 'uint256' },
+      { name: 'owner', internalType: 'address', type: 'address' },
+    ],
+    name: 'ERC721IncorrectOwner',
+  },
+  {
+    type: 'error',
+    inputs: [
+      { name: 'operator', internalType: 'address', type: 'address' },
+      { name: 'tokenId', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'ERC721InsufficientApproval',
+  },
+  {
+    type: 'error',
+    inputs: [{ name: 'approver', internalType: 'address', type: 'address' }],
+    name: 'ERC721InvalidApprover',
+  },
+  {
+    type: 'error',
+    inputs: [{ name: 'operator', internalType: 'address', type: 'address' }],
+    name: 'ERC721InvalidOperator',
+  },
+  {
+    type: 'error',
+    inputs: [{ name: 'owner', internalType: 'address', type: 'address' }],
+    name: 'ERC721InvalidOwner',
+  },
+  {
+    type: 'error',
+    inputs: [{ name: 'receiver', internalType: 'address', type: 'address' }],
+    name: 'ERC721InvalidReceiver',
+  },
+  {
+    type: 'error',
+    inputs: [{ name: 'sender', internalType: 'address', type: 'address' }],
+    name: 'ERC721InvalidSender',
+  },
+  {
+    type: 'error',
+    inputs: [{ name: 'tokenId', internalType: 'uint256', type: 'uint256' }],
+    name: 'ERC721NonexistentToken',
+  },
+] as const
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // IMulticall3
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -249,224 +685,272 @@ export const iMulticall3Abi = [
 ] as const
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// M
+// IToken
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-export const mAbi = [
+export const iTokenAbi = [
+  {
+    type: 'function',
+    inputs: [
+      { name: 'to', internalType: 'address', type: 'address' },
+      { name: 'amount', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'mint',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+] as const
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// MerkleAirdrop
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+export const merkleAirdropAbi = [
   {
     type: 'constructor',
     inputs: [
-      { name: '_owners', internalType: 'address[]', type: 'address[]' },
-      {
-        name: '_numConfirmationsRequired',
-        internalType: 'uint256',
-        type: 'uint256',
-      },
+      { name: 'token_', internalType: 'address', type: 'address' },
+      { name: 'merkleRoot_', internalType: 'bytes32', type: 'bytes32' },
     ],
-    stateMutability: 'nonpayable',
-  },
-  { type: 'receive', stateMutability: 'payable' },
-  {
-    type: 'function',
-    inputs: [{ name: '_txIndex', internalType: 'uint256', type: 'uint256' }],
-    name: 'confirmTransaction',
-    outputs: [],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
-    inputs: [{ name: '_txIndex', internalType: 'uint256', type: 'uint256' }],
-    name: 'executeTransaction',
-    outputs: [],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
-    inputs: [],
-    name: 'getOwners',
-    outputs: [{ name: '', internalType: 'address[]', type: 'address[]' }],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    inputs: [{ name: '_txIndex', internalType: 'uint256', type: 'uint256' }],
-    name: 'getTransaction',
-    outputs: [
-      { name: 'to', internalType: 'address', type: 'address' },
-      { name: 'value', internalType: 'uint256', type: 'uint256' },
-      { name: 'data', internalType: 'bytes', type: 'bytes' },
-      { name: 'executed', internalType: 'bool', type: 'bool' },
-      { name: 'numConfirmations', internalType: 'uint256', type: 'uint256' },
-    ],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    inputs: [],
-    name: 'getTransactionCount',
-    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    inputs: [
-      { name: '', internalType: 'uint256', type: 'uint256' },
-      { name: '', internalType: 'address', type: 'address' },
-    ],
-    name: 'isConfirmed',
-    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    inputs: [{ name: '', internalType: 'address', type: 'address' }],
-    name: 'isOwner',
-    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    inputs: [],
-    name: 'numConfirmationsRequired',
-    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    inputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
-    name: 'owners',
-    outputs: [{ name: '', internalType: 'address', type: 'address' }],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    inputs: [{ name: '_txIndex', internalType: 'uint256', type: 'uint256' }],
-    name: 'revokeConfirmation',
-    outputs: [],
     stateMutability: 'nonpayable',
   },
   {
     type: 'function',
     inputs: [
-      { name: '_to', internalType: 'address', type: 'address' },
-      { name: '_value', internalType: 'uint256', type: 'uint256' },
-      { name: '_data', internalType: 'bytes', type: 'bytes' },
+      { name: 'proof', internalType: 'bytes32[]', type: 'bytes32[]' },
+      { name: 'to', internalType: 'address', type: 'address' },
+      { name: 'amount', internalType: 'uint256', type: 'uint256' },
     ],
-    name: 'submitTransaction',
+    name: 'claim',
     outputs: [],
     stateMutability: 'nonpayable',
   },
   {
     type: 'function',
-    inputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
-    name: 'transactions',
-    outputs: [
+    inputs: [{ name: '', internalType: 'bytes32', type: 'bytes32' }],
+    name: 'claimed',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
       { name: 'to', internalType: 'address', type: 'address' },
-      { name: 'value', internalType: 'uint256', type: 'uint256' },
-      { name: 'data', internalType: 'bytes', type: 'bytes' },
-      { name: 'executed', internalType: 'bool', type: 'bool' },
-      { name: 'numConfirmations', internalType: 'uint256', type: 'uint256' },
+      { name: 'amount', internalType: 'uint256', type: 'uint256' },
     ],
+    name: 'getLeafHash',
+    outputs: [{ name: '', internalType: 'bytes32', type: 'bytes32' }],
+    stateMutability: 'pure',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'mToken',
+    outputs: [{ name: '', internalType: 'contract IToken', type: 'address' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'merkleRoot',
+    outputs: [{ name: '', internalType: 'bytes32', type: 'bytes32' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'proof', internalType: 'bytes32[]', type: 'bytes32[]' },
+      { name: 'to', internalType: 'address', type: 'address' },
+      { name: 'amount', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'verify',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
     stateMutability: 'view',
   },
   {
     type: 'event',
     anonymous: false,
     inputs: [
-      {
-        name: 'owner',
-        internalType: 'address',
-        type: 'address',
-        indexed: true,
-      },
-      {
-        name: 'txIndex',
-        internalType: 'uint256',
-        type: 'uint256',
-        indexed: true,
-      },
-    ],
-    name: 'ConfirmTransaction',
-  },
-  {
-    type: 'event',
-    anonymous: false,
-    inputs: [
-      {
-        name: 'sender',
-        internalType: 'address',
-        type: 'address',
-        indexed: true,
-      },
+      { name: 'to', internalType: 'address', type: 'address', indexed: true },
       {
         name: 'amount',
         internalType: 'uint256',
         type: 'uint256',
         indexed: false,
       },
+    ],
+    name: 'Claim',
+  },
+] as const
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// MerkleAirdropToken
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+export const merkleAirdropTokenAbi = [
+  {
+    type: 'constructor',
+    inputs: [
+      { name: 'initialOwner', internalType: 'address', type: 'address' },
+    ],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'owner', internalType: 'address', type: 'address' },
+      { name: 'spender', internalType: 'address', type: 'address' },
+    ],
+    name: 'allowance',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'spender', internalType: 'address', type: 'address' },
+      { name: 'value', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'approve',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'account', internalType: 'address', type: 'address' }],
+    name: 'balanceOf',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'decimals',
+    outputs: [{ name: '', internalType: 'uint8', type: 'uint8' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'to', internalType: 'address', type: 'address' },
+      { name: 'amount', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'mint',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'name',
+    outputs: [{ name: '', internalType: 'string', type: 'string' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'owner',
+    outputs: [{ name: '', internalType: 'address', type: 'address' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'renounceOwnership',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'symbol',
+    outputs: [{ name: '', internalType: 'string', type: 'string' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'totalSupply',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'to', internalType: 'address', type: 'address' },
+      { name: 'value', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'transfer',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'from', internalType: 'address', type: 'address' },
+      { name: 'to', internalType: 'address', type: 'address' },
+      { name: 'value', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'transferFrom',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'newOwner', internalType: 'address', type: 'address' }],
+    name: 'transferOwnership',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
       {
-        name: 'balance',
+        name: 'owner',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+      {
+        name: 'spender',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+      {
+        name: 'value',
         internalType: 'uint256',
         type: 'uint256',
         indexed: false,
       },
     ],
-    name: 'Deposit',
+    name: 'Approval',
   },
   {
     type: 'event',
     anonymous: false,
     inputs: [
       {
-        name: 'owner',
+        name: 'previousOwner',
         internalType: 'address',
         type: 'address',
         indexed: true,
       },
       {
-        name: 'txIndex',
-        internalType: 'uint256',
-        type: 'uint256',
+        name: 'newOwner',
+        internalType: 'address',
+        type: 'address',
         indexed: true,
       },
     ],
-    name: 'ExecuteTransaction',
+    name: 'OwnershipTransferred',
   },
   {
     type: 'event',
     anonymous: false,
     inputs: [
-      {
-        name: 'owner',
-        internalType: 'address',
-        type: 'address',
-        indexed: true,
-      },
-      {
-        name: 'txIndex',
-        internalType: 'uint256',
-        type: 'uint256',
-        indexed: true,
-      },
-    ],
-    name: 'RevokeConfirmation',
-  },
-  {
-    type: 'event',
-    anonymous: false,
-    inputs: [
-      {
-        name: 'owner',
-        internalType: 'address',
-        type: 'address',
-        indexed: true,
-      },
-      {
-        name: 'txIndex',
-        internalType: 'uint256',
-        type: 'uint256',
-        indexed: true,
-      },
+      { name: 'from', internalType: 'address', type: 'address', indexed: true },
       { name: 'to', internalType: 'address', type: 'address', indexed: true },
       {
         name: 'value',
@@ -474,10 +958,65 @@ export const mAbi = [
         type: 'uint256',
         indexed: false,
       },
-      { name: 'data', internalType: 'bytes', type: 'bytes', indexed: false },
     ],
-    name: 'SubmitTransaction',
+    name: 'Transfer',
   },
+  {
+    type: 'error',
+    inputs: [
+      { name: 'spender', internalType: 'address', type: 'address' },
+      { name: 'allowance', internalType: 'uint256', type: 'uint256' },
+      { name: 'needed', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'ERC20InsufficientAllowance',
+  },
+  {
+    type: 'error',
+    inputs: [
+      { name: 'sender', internalType: 'address', type: 'address' },
+      { name: 'balance', internalType: 'uint256', type: 'uint256' },
+      { name: 'needed', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'ERC20InsufficientBalance',
+  },
+  {
+    type: 'error',
+    inputs: [{ name: 'approver', internalType: 'address', type: 'address' }],
+    name: 'ERC20InvalidApprover',
+  },
+  {
+    type: 'error',
+    inputs: [{ name: 'receiver', internalType: 'address', type: 'address' }],
+    name: 'ERC20InvalidReceiver',
+  },
+  {
+    type: 'error',
+    inputs: [{ name: 'sender', internalType: 'address', type: 'address' }],
+    name: 'ERC20InvalidSender',
+  },
+  {
+    type: 'error',
+    inputs: [{ name: 'spender', internalType: 'address', type: 'address' }],
+    name: 'ERC20InvalidSpender',
+  },
+  {
+    type: 'error',
+    inputs: [{ name: 'owner', internalType: 'address', type: 'address' }],
+    name: 'OwnableInvalidOwner',
+  },
+  {
+    type: 'error',
+    inputs: [{ name: 'account', internalType: 'address', type: 'address' }],
+    name: 'OwnableUnauthorizedAccount',
+  },
+] as const
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// MerkleProof
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+export const merkleProofAbi = [
+  { type: 'error', inputs: [], name: 'MerkleProofInvalidMultiproof' },
 ] as const
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -687,8 +1226,357 @@ export const multiSigWalletAbi = [
 ] as const
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Ownable
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+export const ownableAbi = [
+  {
+    type: 'function',
+    inputs: [],
+    name: 'owner',
+    outputs: [{ name: '', internalType: 'address', type: 'address' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'renounceOwnership',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'newOwner', internalType: 'address', type: 'address' }],
+    name: 'transferOwnership',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'previousOwner',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+      {
+        name: 'newOwner',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+    ],
+    name: 'OwnershipTransferred',
+  },
+  {
+    type: 'error',
+    inputs: [{ name: 'owner', internalType: 'address', type: 'address' }],
+    name: 'OwnableInvalidOwner',
+  },
+  {
+    type: 'error',
+    inputs: [{ name: 'account', internalType: 'address', type: 'address' }],
+    name: 'OwnableUnauthorizedAccount',
+  },
+] as const
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // React
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link erc20Abi}__
+ */
+export const useReadErc20 = /*#__PURE__*/ createUseReadContract({
+  abi: erc20Abi,
+})
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link erc20Abi}__ and `functionName` set to `"allowance"`
+ */
+export const useReadErc20Allowance = /*#__PURE__*/ createUseReadContract({
+  abi: erc20Abi,
+  functionName: 'allowance',
+})
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link erc20Abi}__ and `functionName` set to `"balanceOf"`
+ */
+export const useReadErc20BalanceOf = /*#__PURE__*/ createUseReadContract({
+  abi: erc20Abi,
+  functionName: 'balanceOf',
+})
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link erc20Abi}__ and `functionName` set to `"decimals"`
+ */
+export const useReadErc20Decimals = /*#__PURE__*/ createUseReadContract({
+  abi: erc20Abi,
+  functionName: 'decimals',
+})
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link erc20Abi}__ and `functionName` set to `"name"`
+ */
+export const useReadErc20Name = /*#__PURE__*/ createUseReadContract({
+  abi: erc20Abi,
+  functionName: 'name',
+})
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link erc20Abi}__ and `functionName` set to `"symbol"`
+ */
+export const useReadErc20Symbol = /*#__PURE__*/ createUseReadContract({
+  abi: erc20Abi,
+  functionName: 'symbol',
+})
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link erc20Abi}__ and `functionName` set to `"totalSupply"`
+ */
+export const useReadErc20TotalSupply = /*#__PURE__*/ createUseReadContract({
+  abi: erc20Abi,
+  functionName: 'totalSupply',
+})
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link erc20Abi}__
+ */
+export const useWriteErc20 = /*#__PURE__*/ createUseWriteContract({
+  abi: erc20Abi,
+})
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link erc20Abi}__ and `functionName` set to `"approve"`
+ */
+export const useWriteErc20Approve = /*#__PURE__*/ createUseWriteContract({
+  abi: erc20Abi,
+  functionName: 'approve',
+})
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link erc20Abi}__ and `functionName` set to `"transfer"`
+ */
+export const useWriteErc20Transfer = /*#__PURE__*/ createUseWriteContract({
+  abi: erc20Abi,
+  functionName: 'transfer',
+})
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link erc20Abi}__ and `functionName` set to `"transferFrom"`
+ */
+export const useWriteErc20TransferFrom = /*#__PURE__*/ createUseWriteContract({
+  abi: erc20Abi,
+  functionName: 'transferFrom',
+})
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link erc20Abi}__
+ */
+export const useSimulateErc20 = /*#__PURE__*/ createUseSimulateContract({
+  abi: erc20Abi,
+})
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link erc20Abi}__ and `functionName` set to `"approve"`
+ */
+export const useSimulateErc20Approve = /*#__PURE__*/ createUseSimulateContract({
+  abi: erc20Abi,
+  functionName: 'approve',
+})
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link erc20Abi}__ and `functionName` set to `"transfer"`
+ */
+export const useSimulateErc20Transfer = /*#__PURE__*/ createUseSimulateContract(
+  { abi: erc20Abi, functionName: 'transfer' },
+)
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link erc20Abi}__ and `functionName` set to `"transferFrom"`
+ */
+export const useSimulateErc20TransferFrom =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: erc20Abi,
+    functionName: 'transferFrom',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link erc20Abi}__
+ */
+export const useWatchErc20Event = /*#__PURE__*/ createUseWatchContractEvent({
+  abi: erc20Abi,
+})
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link erc20Abi}__ and `eventName` set to `"Approval"`
+ */
+export const useWatchErc20ApprovalEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: erc20Abi,
+    eventName: 'Approval',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link erc20Abi}__ and `eventName` set to `"Transfer"`
+ */
+export const useWatchErc20TransferEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: erc20Abi,
+    eventName: 'Transfer',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link ierc20MetadataAbi}__
+ */
+export const useReadIerc20Metadata = /*#__PURE__*/ createUseReadContract({
+  abi: ierc20MetadataAbi,
+})
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link ierc20MetadataAbi}__ and `functionName` set to `"allowance"`
+ */
+export const useReadIerc20MetadataAllowance =
+  /*#__PURE__*/ createUseReadContract({
+    abi: ierc20MetadataAbi,
+    functionName: 'allowance',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link ierc20MetadataAbi}__ and `functionName` set to `"balanceOf"`
+ */
+export const useReadIerc20MetadataBalanceOf =
+  /*#__PURE__*/ createUseReadContract({
+    abi: ierc20MetadataAbi,
+    functionName: 'balanceOf',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link ierc20MetadataAbi}__ and `functionName` set to `"decimals"`
+ */
+export const useReadIerc20MetadataDecimals =
+  /*#__PURE__*/ createUseReadContract({
+    abi: ierc20MetadataAbi,
+    functionName: 'decimals',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link ierc20MetadataAbi}__ and `functionName` set to `"name"`
+ */
+export const useReadIerc20MetadataName = /*#__PURE__*/ createUseReadContract({
+  abi: ierc20MetadataAbi,
+  functionName: 'name',
+})
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link ierc20MetadataAbi}__ and `functionName` set to `"symbol"`
+ */
+export const useReadIerc20MetadataSymbol = /*#__PURE__*/ createUseReadContract({
+  abi: ierc20MetadataAbi,
+  functionName: 'symbol',
+})
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link ierc20MetadataAbi}__ and `functionName` set to `"totalSupply"`
+ */
+export const useReadIerc20MetadataTotalSupply =
+  /*#__PURE__*/ createUseReadContract({
+    abi: ierc20MetadataAbi,
+    functionName: 'totalSupply',
+  })
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link ierc20MetadataAbi}__
+ */
+export const useWriteIerc20Metadata = /*#__PURE__*/ createUseWriteContract({
+  abi: ierc20MetadataAbi,
+})
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link ierc20MetadataAbi}__ and `functionName` set to `"approve"`
+ */
+export const useWriteIerc20MetadataApprove =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: ierc20MetadataAbi,
+    functionName: 'approve',
+  })
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link ierc20MetadataAbi}__ and `functionName` set to `"transfer"`
+ */
+export const useWriteIerc20MetadataTransfer =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: ierc20MetadataAbi,
+    functionName: 'transfer',
+  })
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link ierc20MetadataAbi}__ and `functionName` set to `"transferFrom"`
+ */
+export const useWriteIerc20MetadataTransferFrom =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: ierc20MetadataAbi,
+    functionName: 'transferFrom',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link ierc20MetadataAbi}__
+ */
+export const useSimulateIerc20Metadata =
+  /*#__PURE__*/ createUseSimulateContract({ abi: ierc20MetadataAbi })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link ierc20MetadataAbi}__ and `functionName` set to `"approve"`
+ */
+export const useSimulateIerc20MetadataApprove =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: ierc20MetadataAbi,
+    functionName: 'approve',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link ierc20MetadataAbi}__ and `functionName` set to `"transfer"`
+ */
+export const useSimulateIerc20MetadataTransfer =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: ierc20MetadataAbi,
+    functionName: 'transfer',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link ierc20MetadataAbi}__ and `functionName` set to `"transferFrom"`
+ */
+export const useSimulateIerc20MetadataTransferFrom =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: ierc20MetadataAbi,
+    functionName: 'transferFrom',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link ierc20MetadataAbi}__
+ */
+export const useWatchIerc20MetadataEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({ abi: ierc20MetadataAbi })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link ierc20MetadataAbi}__ and `eventName` set to `"Approval"`
+ */
+export const useWatchIerc20MetadataApprovalEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: ierc20MetadataAbi,
+    eventName: 'Approval',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link ierc20MetadataAbi}__ and `eventName` set to `"Transfer"`
+ */
+export const useWatchIerc20MetadataTransferEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: ierc20MetadataAbi,
+    eventName: 'Transfer',
+  })
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link iMulticall3Abi}__
@@ -906,201 +1794,352 @@ export const useSimulateIMulticall3TryBlockAndAggregate =
   })
 
 /**
- * Wraps __{@link useReadContract}__ with `abi` set to __{@link mAbi}__
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link iTokenAbi}__
  */
-export const useReadM = /*#__PURE__*/ createUseReadContract({ abi: mAbi })
-
-/**
- * Wraps __{@link useReadContract}__ with `abi` set to __{@link mAbi}__ and `functionName` set to `"getOwners"`
- */
-export const useReadMGetOwners = /*#__PURE__*/ createUseReadContract({
-  abi: mAbi,
-  functionName: 'getOwners',
+export const useWriteIToken = /*#__PURE__*/ createUseWriteContract({
+  abi: iTokenAbi,
 })
 
 /**
- * Wraps __{@link useReadContract}__ with `abi` set to __{@link mAbi}__ and `functionName` set to `"getTransaction"`
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link iTokenAbi}__ and `functionName` set to `"mint"`
  */
-export const useReadMGetTransaction = /*#__PURE__*/ createUseReadContract({
-  abi: mAbi,
-  functionName: 'getTransaction',
+export const useWriteITokenMint = /*#__PURE__*/ createUseWriteContract({
+  abi: iTokenAbi,
+  functionName: 'mint',
 })
 
 /**
- * Wraps __{@link useReadContract}__ with `abi` set to __{@link mAbi}__ and `functionName` set to `"getTransactionCount"`
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link iTokenAbi}__
  */
-export const useReadMGetTransactionCount = /*#__PURE__*/ createUseReadContract({
-  abi: mAbi,
-  functionName: 'getTransactionCount',
+export const useSimulateIToken = /*#__PURE__*/ createUseSimulateContract({
+  abi: iTokenAbi,
 })
 
 /**
- * Wraps __{@link useReadContract}__ with `abi` set to __{@link mAbi}__ and `functionName` set to `"isConfirmed"`
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link iTokenAbi}__ and `functionName` set to `"mint"`
  */
-export const useReadMIsConfirmed = /*#__PURE__*/ createUseReadContract({
-  abi: mAbi,
-  functionName: 'isConfirmed',
+export const useSimulateITokenMint = /*#__PURE__*/ createUseSimulateContract({
+  abi: iTokenAbi,
+  functionName: 'mint',
 })
 
 /**
- * Wraps __{@link useReadContract}__ with `abi` set to __{@link mAbi}__ and `functionName` set to `"isOwner"`
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link merkleAirdropAbi}__
  */
-export const useReadMIsOwner = /*#__PURE__*/ createUseReadContract({
-  abi: mAbi,
-  functionName: 'isOwner',
+export const useReadMerkleAirdrop = /*#__PURE__*/ createUseReadContract({
+  abi: merkleAirdropAbi,
 })
 
 /**
- * Wraps __{@link useReadContract}__ with `abi` set to __{@link mAbi}__ and `functionName` set to `"numConfirmationsRequired"`
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link merkleAirdropAbi}__ and `functionName` set to `"claimed"`
  */
-export const useReadMNumConfirmationsRequired =
+export const useReadMerkleAirdropClaimed = /*#__PURE__*/ createUseReadContract({
+  abi: merkleAirdropAbi,
+  functionName: 'claimed',
+})
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link merkleAirdropAbi}__ and `functionName` set to `"getLeafHash"`
+ */
+export const useReadMerkleAirdropGetLeafHash =
   /*#__PURE__*/ createUseReadContract({
-    abi: mAbi,
-    functionName: 'numConfirmationsRequired',
+    abi: merkleAirdropAbi,
+    functionName: 'getLeafHash',
   })
 
 /**
- * Wraps __{@link useReadContract}__ with `abi` set to __{@link mAbi}__ and `functionName` set to `"owners"`
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link merkleAirdropAbi}__ and `functionName` set to `"mToken"`
  */
-export const useReadMOwners = /*#__PURE__*/ createUseReadContract({
-  abi: mAbi,
-  functionName: 'owners',
+export const useReadMerkleAirdropMToken = /*#__PURE__*/ createUseReadContract({
+  abi: merkleAirdropAbi,
+  functionName: 'mToken',
 })
 
 /**
- * Wraps __{@link useReadContract}__ with `abi` set to __{@link mAbi}__ and `functionName` set to `"transactions"`
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link merkleAirdropAbi}__ and `functionName` set to `"merkleRoot"`
  */
-export const useReadMTransactions = /*#__PURE__*/ createUseReadContract({
-  abi: mAbi,
-  functionName: 'transactions',
+export const useReadMerkleAirdropMerkleRoot =
+  /*#__PURE__*/ createUseReadContract({
+    abi: merkleAirdropAbi,
+    functionName: 'merkleRoot',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link merkleAirdropAbi}__ and `functionName` set to `"verify"`
+ */
+export const useReadMerkleAirdropVerify = /*#__PURE__*/ createUseReadContract({
+  abi: merkleAirdropAbi,
+  functionName: 'verify',
 })
 
 /**
- * Wraps __{@link useWriteContract}__ with `abi` set to __{@link mAbi}__
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link merkleAirdropAbi}__
  */
-export const useWriteM = /*#__PURE__*/ createUseWriteContract({ abi: mAbi })
+export const useWriteMerkleAirdrop = /*#__PURE__*/ createUseWriteContract({
+  abi: merkleAirdropAbi,
+})
 
 /**
- * Wraps __{@link useWriteContract}__ with `abi` set to __{@link mAbi}__ and `functionName` set to `"confirmTransaction"`
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link merkleAirdropAbi}__ and `functionName` set to `"claim"`
  */
-export const useWriteMConfirmTransaction = /*#__PURE__*/ createUseWriteContract(
-  { abi: mAbi, functionName: 'confirmTransaction' },
+export const useWriteMerkleAirdropClaim = /*#__PURE__*/ createUseWriteContract({
+  abi: merkleAirdropAbi,
+  functionName: 'claim',
+})
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link merkleAirdropAbi}__
+ */
+export const useSimulateMerkleAirdrop = /*#__PURE__*/ createUseSimulateContract(
+  { abi: merkleAirdropAbi },
 )
 
 /**
- * Wraps __{@link useWriteContract}__ with `abi` set to __{@link mAbi}__ and `functionName` set to `"executeTransaction"`
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link merkleAirdropAbi}__ and `functionName` set to `"claim"`
  */
-export const useWriteMExecuteTransaction = /*#__PURE__*/ createUseWriteContract(
-  { abi: mAbi, functionName: 'executeTransaction' },
-)
+export const useSimulateMerkleAirdropClaim =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: merkleAirdropAbi,
+    functionName: 'claim',
+  })
 
 /**
- * Wraps __{@link useWriteContract}__ with `abi` set to __{@link mAbi}__ and `functionName` set to `"revokeConfirmation"`
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link merkleAirdropAbi}__
  */
-export const useWriteMRevokeConfirmation = /*#__PURE__*/ createUseWriteContract(
-  { abi: mAbi, functionName: 'revokeConfirmation' },
-)
+export const useWatchMerkleAirdropEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({ abi: merkleAirdropAbi })
 
 /**
- * Wraps __{@link useWriteContract}__ with `abi` set to __{@link mAbi}__ and `functionName` set to `"submitTransaction"`
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link merkleAirdropAbi}__ and `eventName` set to `"Claim"`
  */
-export const useWriteMSubmitTransaction = /*#__PURE__*/ createUseWriteContract({
-  abi: mAbi,
-  functionName: 'submitTransaction',
+export const useWatchMerkleAirdropClaimEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: merkleAirdropAbi,
+    eventName: 'Claim',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link merkleAirdropTokenAbi}__
+ */
+export const useReadMerkleAirdropToken = /*#__PURE__*/ createUseReadContract({
+  abi: merkleAirdropTokenAbi,
 })
 
 /**
- * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link mAbi}__
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link merkleAirdropTokenAbi}__ and `functionName` set to `"allowance"`
  */
-export const useSimulateM = /*#__PURE__*/ createUseSimulateContract({
-  abi: mAbi,
+export const useReadMerkleAirdropTokenAllowance =
+  /*#__PURE__*/ createUseReadContract({
+    abi: merkleAirdropTokenAbi,
+    functionName: 'allowance',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link merkleAirdropTokenAbi}__ and `functionName` set to `"balanceOf"`
+ */
+export const useReadMerkleAirdropTokenBalanceOf =
+  /*#__PURE__*/ createUseReadContract({
+    abi: merkleAirdropTokenAbi,
+    functionName: 'balanceOf',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link merkleAirdropTokenAbi}__ and `functionName` set to `"decimals"`
+ */
+export const useReadMerkleAirdropTokenDecimals =
+  /*#__PURE__*/ createUseReadContract({
+    abi: merkleAirdropTokenAbi,
+    functionName: 'decimals',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link merkleAirdropTokenAbi}__ and `functionName` set to `"name"`
+ */
+export const useReadMerkleAirdropTokenName =
+  /*#__PURE__*/ createUseReadContract({
+    abi: merkleAirdropTokenAbi,
+    functionName: 'name',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link merkleAirdropTokenAbi}__ and `functionName` set to `"owner"`
+ */
+export const useReadMerkleAirdropTokenOwner =
+  /*#__PURE__*/ createUseReadContract({
+    abi: merkleAirdropTokenAbi,
+    functionName: 'owner',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link merkleAirdropTokenAbi}__ and `functionName` set to `"symbol"`
+ */
+export const useReadMerkleAirdropTokenSymbol =
+  /*#__PURE__*/ createUseReadContract({
+    abi: merkleAirdropTokenAbi,
+    functionName: 'symbol',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link merkleAirdropTokenAbi}__ and `functionName` set to `"totalSupply"`
+ */
+export const useReadMerkleAirdropTokenTotalSupply =
+  /*#__PURE__*/ createUseReadContract({
+    abi: merkleAirdropTokenAbi,
+    functionName: 'totalSupply',
+  })
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link merkleAirdropTokenAbi}__
+ */
+export const useWriteMerkleAirdropToken = /*#__PURE__*/ createUseWriteContract({
+  abi: merkleAirdropTokenAbi,
 })
 
 /**
- * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link mAbi}__ and `functionName` set to `"confirmTransaction"`
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link merkleAirdropTokenAbi}__ and `functionName` set to `"approve"`
  */
-export const useSimulateMConfirmTransaction =
+export const useWriteMerkleAirdropTokenApprove =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: merkleAirdropTokenAbi,
+    functionName: 'approve',
+  })
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link merkleAirdropTokenAbi}__ and `functionName` set to `"mint"`
+ */
+export const useWriteMerkleAirdropTokenMint =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: merkleAirdropTokenAbi,
+    functionName: 'mint',
+  })
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link merkleAirdropTokenAbi}__ and `functionName` set to `"renounceOwnership"`
+ */
+export const useWriteMerkleAirdropTokenRenounceOwnership =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: merkleAirdropTokenAbi,
+    functionName: 'renounceOwnership',
+  })
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link merkleAirdropTokenAbi}__ and `functionName` set to `"transfer"`
+ */
+export const useWriteMerkleAirdropTokenTransfer =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: merkleAirdropTokenAbi,
+    functionName: 'transfer',
+  })
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link merkleAirdropTokenAbi}__ and `functionName` set to `"transferFrom"`
+ */
+export const useWriteMerkleAirdropTokenTransferFrom =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: merkleAirdropTokenAbi,
+    functionName: 'transferFrom',
+  })
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link merkleAirdropTokenAbi}__ and `functionName` set to `"transferOwnership"`
+ */
+export const useWriteMerkleAirdropTokenTransferOwnership =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: merkleAirdropTokenAbi,
+    functionName: 'transferOwnership',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link merkleAirdropTokenAbi}__
+ */
+export const useSimulateMerkleAirdropToken =
+  /*#__PURE__*/ createUseSimulateContract({ abi: merkleAirdropTokenAbi })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link merkleAirdropTokenAbi}__ and `functionName` set to `"approve"`
+ */
+export const useSimulateMerkleAirdropTokenApprove =
   /*#__PURE__*/ createUseSimulateContract({
-    abi: mAbi,
-    functionName: 'confirmTransaction',
+    abi: merkleAirdropTokenAbi,
+    functionName: 'approve',
   })
 
 /**
- * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link mAbi}__ and `functionName` set to `"executeTransaction"`
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link merkleAirdropTokenAbi}__ and `functionName` set to `"mint"`
  */
-export const useSimulateMExecuteTransaction =
+export const useSimulateMerkleAirdropTokenMint =
   /*#__PURE__*/ createUseSimulateContract({
-    abi: mAbi,
-    functionName: 'executeTransaction',
+    abi: merkleAirdropTokenAbi,
+    functionName: 'mint',
   })
 
 /**
- * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link mAbi}__ and `functionName` set to `"revokeConfirmation"`
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link merkleAirdropTokenAbi}__ and `functionName` set to `"renounceOwnership"`
  */
-export const useSimulateMRevokeConfirmation =
+export const useSimulateMerkleAirdropTokenRenounceOwnership =
   /*#__PURE__*/ createUseSimulateContract({
-    abi: mAbi,
-    functionName: 'revokeConfirmation',
+    abi: merkleAirdropTokenAbi,
+    functionName: 'renounceOwnership',
   })
 
 /**
- * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link mAbi}__ and `functionName` set to `"submitTransaction"`
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link merkleAirdropTokenAbi}__ and `functionName` set to `"transfer"`
  */
-export const useSimulateMSubmitTransaction =
+export const useSimulateMerkleAirdropTokenTransfer =
   /*#__PURE__*/ createUseSimulateContract({
-    abi: mAbi,
-    functionName: 'submitTransaction',
+    abi: merkleAirdropTokenAbi,
+    functionName: 'transfer',
   })
 
 /**
- * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link mAbi}__
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link merkleAirdropTokenAbi}__ and `functionName` set to `"transferFrom"`
  */
-export const useWatchMEvent = /*#__PURE__*/ createUseWatchContractEvent({
-  abi: mAbi,
-})
-
-/**
- * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link mAbi}__ and `eventName` set to `"ConfirmTransaction"`
- */
-export const useWatchMConfirmTransactionEvent =
-  /*#__PURE__*/ createUseWatchContractEvent({
-    abi: mAbi,
-    eventName: 'ConfirmTransaction',
+export const useSimulateMerkleAirdropTokenTransferFrom =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: merkleAirdropTokenAbi,
+    functionName: 'transferFrom',
   })
 
 /**
- * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link mAbi}__ and `eventName` set to `"Deposit"`
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link merkleAirdropTokenAbi}__ and `functionName` set to `"transferOwnership"`
  */
-export const useWatchMDepositEvent = /*#__PURE__*/ createUseWatchContractEvent({
-  abi: mAbi,
-  eventName: 'Deposit',
-})
-
-/**
- * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link mAbi}__ and `eventName` set to `"ExecuteTransaction"`
- */
-export const useWatchMExecuteTransactionEvent =
-  /*#__PURE__*/ createUseWatchContractEvent({
-    abi: mAbi,
-    eventName: 'ExecuteTransaction',
+export const useSimulateMerkleAirdropTokenTransferOwnership =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: merkleAirdropTokenAbi,
+    functionName: 'transferOwnership',
   })
 
 /**
- * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link mAbi}__ and `eventName` set to `"RevokeConfirmation"`
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link merkleAirdropTokenAbi}__
  */
-export const useWatchMRevokeConfirmationEvent =
+export const useWatchMerkleAirdropTokenEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({ abi: merkleAirdropTokenAbi })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link merkleAirdropTokenAbi}__ and `eventName` set to `"Approval"`
+ */
+export const useWatchMerkleAirdropTokenApprovalEvent =
   /*#__PURE__*/ createUseWatchContractEvent({
-    abi: mAbi,
-    eventName: 'RevokeConfirmation',
+    abi: merkleAirdropTokenAbi,
+    eventName: 'Approval',
   })
 
 /**
- * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link mAbi}__ and `eventName` set to `"SubmitTransaction"`
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link merkleAirdropTokenAbi}__ and `eventName` set to `"OwnershipTransferred"`
  */
-export const useWatchMSubmitTransactionEvent =
+export const useWatchMerkleAirdropTokenOwnershipTransferredEvent =
   /*#__PURE__*/ createUseWatchContractEvent({
-    abi: mAbi,
-    eventName: 'SubmitTransaction',
+    abi: merkleAirdropTokenAbi,
+    eventName: 'OwnershipTransferred',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link merkleAirdropTokenAbi}__ and `eventName` set to `"Transfer"`
+ */
+export const useWatchMerkleAirdropTokenTransferEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: merkleAirdropTokenAbi,
+    eventName: 'Transfer',
   })
 
 /**
@@ -1295,4 +2334,85 @@ export const useWatchMultiSigWalletTransactionSubmittedEvent =
   /*#__PURE__*/ createUseWatchContractEvent({
     abi: multiSigWalletAbi,
     eventName: 'TransactionSubmitted',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link ownableAbi}__
+ */
+export const useReadOwnable = /*#__PURE__*/ createUseReadContract({
+  abi: ownableAbi,
+})
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link ownableAbi}__ and `functionName` set to `"owner"`
+ */
+export const useReadOwnableOwner = /*#__PURE__*/ createUseReadContract({
+  abi: ownableAbi,
+  functionName: 'owner',
+})
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link ownableAbi}__
+ */
+export const useWriteOwnable = /*#__PURE__*/ createUseWriteContract({
+  abi: ownableAbi,
+})
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link ownableAbi}__ and `functionName` set to `"renounceOwnership"`
+ */
+export const useWriteOwnableRenounceOwnership =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: ownableAbi,
+    functionName: 'renounceOwnership',
+  })
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link ownableAbi}__ and `functionName` set to `"transferOwnership"`
+ */
+export const useWriteOwnableTransferOwnership =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: ownableAbi,
+    functionName: 'transferOwnership',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link ownableAbi}__
+ */
+export const useSimulateOwnable = /*#__PURE__*/ createUseSimulateContract({
+  abi: ownableAbi,
+})
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link ownableAbi}__ and `functionName` set to `"renounceOwnership"`
+ */
+export const useSimulateOwnableRenounceOwnership =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: ownableAbi,
+    functionName: 'renounceOwnership',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link ownableAbi}__ and `functionName` set to `"transferOwnership"`
+ */
+export const useSimulateOwnableTransferOwnership =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: ownableAbi,
+    functionName: 'transferOwnership',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link ownableAbi}__
+ */
+export const useWatchOwnableEvent = /*#__PURE__*/ createUseWatchContractEvent({
+  abi: ownableAbi,
+})
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link ownableAbi}__ and `eventName` set to `"OwnershipTransferred"`
+ */
+export const useWatchOwnableOwnershipTransferredEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: ownableAbi,
+    eventName: 'OwnershipTransferred',
   })

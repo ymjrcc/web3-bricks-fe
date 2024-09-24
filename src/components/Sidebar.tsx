@@ -1,6 +1,6 @@
 'use client'
 import { usePathname } from 'next/navigation';
-import { BrickWall, House, Wallet } from "lucide-react"
+import { BrickWall, House, Wallet, TreePine } from "lucide-react"
 import { Link } from "@nextui-org/react"
 import clsx from "clsx"
 import { ConnectButton } from '@rainbow-me/rainbowkit';
@@ -10,7 +10,7 @@ const Sidebar = () => {
   const navItems = [
     { href: '/', label: 'Home', icon: House },
     { href: '/multi-sig-wallet', label: 'Multi-Sig Wallet', icon: Wallet },
-    { href: '/path2', label: 'Path2', icon: BrickWall },
+    { href: '/merkle-airdrop', label: 'Merkle Airdrop', icon: TreePine },
     { href: '/path3', label: 'Path3', icon: BrickWall },
   ]
   return (
