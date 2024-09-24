@@ -184,11 +184,13 @@ const Page = () => {
           info.map(({ key, value, href }) => (
             <li key={key} className="border-b border-gray-100 flex mb-2">
               <div className="w-40 text-gray-400">{key}</div>
-              {
-                href ? 
-                  <a href={href} target="_blank" className="flex-1 text-blue-600 underline underline-offset-2">{value}</a> :
-                  <div className="flex-1">{value}</div>
-              }
+              <div className="flex-1">
+                {
+                  href
+                    ? <a href={href} target="_blank" className="text-blue-600 underline underline-offset-2">{value}</a>
+                    : value
+                }
+              </div>
             </li>
           ))
         }
@@ -246,7 +248,7 @@ const Page = () => {
 
       </div>
 
-
+      <div className="text-gray-400 mb-2">Transactions: </div>
       <Table aria-label="Example table with dynamic content">
         <TableHeader columns={columns}>
           {(column) => <TableColumn key={column.key}>{column.label}</TableColumn>}

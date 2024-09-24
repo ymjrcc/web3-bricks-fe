@@ -85,7 +85,7 @@ const Page = () => {
     }
   }, [isPending])
 
-  const { data: verifyResult, refetch: refetchVerify } = useReadMerkleAirdrop({
+  const { data: verifyResult, refetch: refetchVerify, isSuccess: isSuccessVerify } = useReadMerkleAirdrop({
     address: contractAddress,
     functionName: 'verify',
     args: [proof, to, parseEther(amount)],
@@ -93,6 +93,13 @@ const Page = () => {
       enabled: false
     }
   })
+
+  useEffect(() => {
+    if(!isSuccessVerify) return
+    verifyResult 
+      ? toast.success('Verify Success! You are eligible for the airdrop.') 
+      : toast.error('Verify Failed! You are not eligible for the airdrop.')
+  }, [isSuccessVerify, verifyResult])
 
   const { data: merkleRoot } = useReadMerkleAirdrop({
     address: contractAddress,
@@ -131,11 +138,13 @@ const Page = () => {
           info.map(({ key, value, href }) => (
             <li key={key} className="border-b border-gray-100 flex mb-2">
               <div className="w-40 text-gray-400">{key}</div>
-              {
-                href ?
-                  <a href={href} target="_blank" className="flex-1 text-blue-600 underline underline-offset-2">{value}</a> :
-                  <div className="flex-1">{value}</div>
-              }
+              <div className="flex-1">
+                {
+                  href
+                    ? <a href={href} target="_blank" className="text-blue-600 underline underline-offset-2">{value}</a>
+                    : value
+                }
+              </div>
             </li>
           ))
         }
