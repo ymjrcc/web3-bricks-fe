@@ -11,8 +11,8 @@ import { useAccount, useReadContracts, useWaitForTransactionReceipt } from 'wagm
 import clsx from 'clsx';
 import toast from 'react-hot-toast';
 
-const contractAddress = '0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9' as const
-const erc20Address = '0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0' as const
+const contractAddress = '0x8CB7F4e5FA6194994E4f36e75A21825DAf5b9fd3' as const
+const erc20Address = '0xeec43bBdE21145f2De7E8d27D405cf450ceEF660' as const
 
 const info = [
   { key: 'Name', value: 'Merkle Airdrop' },
