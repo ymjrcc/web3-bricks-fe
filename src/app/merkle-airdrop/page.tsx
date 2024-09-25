@@ -156,7 +156,7 @@ const Page = () => {
         value={merkleRoot}
         className="mb-2"
       />
-      <div className='text-lg  text-gray-400 mb-2'>White List:</div>
+      <div className='text-xl font-bold  text-gray-400 mt-4 mb-2'>White List:</div>
       <Table aria-label="Example static collection table" className='mb-4'>
         <TableHeader>
           <TableColumn>To</TableColumn>
@@ -188,7 +188,7 @@ const Page = () => {
           }
         </TableBody>
       </Table>
-      <div className='text-lg  text-gray-400 mb-2'>Verify:</div>
+      <div className='text-xl font-bold  text-gray-400 mt-4 mb-2'>Verify:</div>
       <div className='flex items-center'>
         <Input
           label="To"

@@ -6,6 +6,439 @@ import {
 } from 'wagmi/codegen'
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// CFToken
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+export const cfTokenAbi = [
+  {
+    type: 'constructor',
+    inputs: [
+      { name: 'initialOwner', internalType: 'address', type: 'address' },
+    ],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'owner', internalType: 'address', type: 'address' },
+      { name: 'spender', internalType: 'address', type: 'address' },
+    ],
+    name: 'allowance',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'spender', internalType: 'address', type: 'address' },
+      { name: 'value', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'approve',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'account', internalType: 'address', type: 'address' }],
+    name: 'balanceOf',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'decimals',
+    outputs: [{ name: '', internalType: 'uint8', type: 'uint8' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'to', internalType: 'address', type: 'address' },
+      { name: 'amount', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'mint',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'name',
+    outputs: [{ name: '', internalType: 'string', type: 'string' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'owner',
+    outputs: [{ name: '', internalType: 'address', type: 'address' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'renounceOwnership',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'symbol',
+    outputs: [{ name: '', internalType: 'string', type: 'string' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'totalSupply',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'to', internalType: 'address', type: 'address' },
+      { name: 'value', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'transfer',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'from', internalType: 'address', type: 'address' },
+      { name: 'to', internalType: 'address', type: 'address' },
+      { name: 'value', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'transferFrom',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'newOwner', internalType: 'address', type: 'address' }],
+    name: 'transferOwnership',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'owner',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+      {
+        name: 'spender',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+      {
+        name: 'value',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+    ],
+    name: 'Approval',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'previousOwner',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+      {
+        name: 'newOwner',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+    ],
+    name: 'OwnershipTransferred',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      { name: 'from', internalType: 'address', type: 'address', indexed: true },
+      { name: 'to', internalType: 'address', type: 'address', indexed: true },
+      {
+        name: 'value',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+    ],
+    name: 'Transfer',
+  },
+  {
+    type: 'error',
+    inputs: [
+      { name: 'spender', internalType: 'address', type: 'address' },
+      { name: 'allowance', internalType: 'uint256', type: 'uint256' },
+      { name: 'needed', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'ERC20InsufficientAllowance',
+  },
+  {
+    type: 'error',
+    inputs: [
+      { name: 'sender', internalType: 'address', type: 'address' },
+      { name: 'balance', internalType: 'uint256', type: 'uint256' },
+      { name: 'needed', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'ERC20InsufficientBalance',
+  },
+  {
+    type: 'error',
+    inputs: [{ name: 'approver', internalType: 'address', type: 'address' }],
+    name: 'ERC20InvalidApprover',
+  },
+  {
+    type: 'error',
+    inputs: [{ name: 'receiver', internalType: 'address', type: 'address' }],
+    name: 'ERC20InvalidReceiver',
+  },
+  {
+    type: 'error',
+    inputs: [{ name: 'sender', internalType: 'address', type: 'address' }],
+    name: 'ERC20InvalidSender',
+  },
+  {
+    type: 'error',
+    inputs: [{ name: 'spender', internalType: 'address', type: 'address' }],
+    name: 'ERC20InvalidSpender',
+  },
+  {
+    type: 'error',
+    inputs: [{ name: 'owner', internalType: 'address', type: 'address' }],
+    name: 'OwnableInvalidOwner',
+  },
+  {
+    type: 'error',
+    inputs: [{ name: 'account', internalType: 'address', type: 'address' }],
+    name: 'OwnableUnauthorizedAccount',
+  },
+] as const
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// CrowdFund
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+export const crowdFundAbi = [
+  {
+    type: 'constructor',
+    inputs: [{ name: 'token_', internalType: 'address', type: 'address' }],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    name: 'campaigns',
+    outputs: [
+      { name: 'creator', internalType: 'address', type: 'address' },
+      { name: 'goal', internalType: 'uint256', type: 'uint256' },
+      { name: 'pledged', internalType: 'uint256', type: 'uint256' },
+      { name: 'startAt', internalType: 'uint32', type: 'uint32' },
+      { name: 'endAt', internalType: 'uint32', type: 'uint32' },
+      { name: 'claimed', internalType: 'bool', type: 'bool' },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: '_id', internalType: 'uint256', type: 'uint256' }],
+    name: 'cancel',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: '_id', internalType: 'uint256', type: 'uint256' }],
+    name: 'claim',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'count',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: '_goal', internalType: 'uint256', type: 'uint256' },
+      { name: '_startAt', internalType: 'uint32', type: 'uint32' },
+      { name: '_endAt', internalType: 'uint32', type: 'uint32' },
+    ],
+    name: 'launch',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: '_id', internalType: 'uint256', type: 'uint256' },
+      { name: '_amount', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'pledge',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: '', internalType: 'uint256', type: 'uint256' },
+      { name: '', internalType: 'address', type: 'address' },
+    ],
+    name: 'pledgedAmount',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: '_id', internalType: 'uint256', type: 'uint256' }],
+    name: 'refund',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'token',
+    outputs: [{ name: '', internalType: 'contract ICFToken', type: 'address' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: '_id', internalType: 'uint256', type: 'uint256' },
+      { name: '_amount', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'unpledge',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      { name: 'id', internalType: 'uint256', type: 'uint256', indexed: true },
+    ],
+    name: 'Cancel',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      { name: 'id', internalType: 'uint256', type: 'uint256', indexed: true },
+    ],
+    name: 'Claim',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      { name: 'id', internalType: 'uint256', type: 'uint256', indexed: true },
+      {
+        name: 'creator',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+      {
+        name: 'goal',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+      {
+        name: 'startAt',
+        internalType: 'uint32',
+        type: 'uint32',
+        indexed: false,
+      },
+      { name: 'endAt', internalType: 'uint32', type: 'uint32', indexed: false },
+    ],
+    name: 'Launch',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      { name: 'id', internalType: 'uint256', type: 'uint256', indexed: true },
+      {
+        name: 'caller',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+      {
+        name: 'amount',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+    ],
+    name: 'Pledge',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      { name: 'id', internalType: 'uint256', type: 'uint256', indexed: true },
+      {
+        name: 'caller',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+      {
+        name: 'amount',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+    ],
+    name: 'Refund',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      { name: 'id', internalType: 'uint256', type: 'uint256', indexed: true },
+      {
+        name: 'caller',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+      {
+        name: 'amount',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+    ],
+    name: 'Unpledge',
+  },
+] as const
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // ERC20
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -163,6 +596,34 @@ export const erc20Abi = [
     type: 'error',
     inputs: [{ name: 'spender', internalType: 'address', type: 'address' }],
     name: 'ERC20InvalidSpender',
+  },
+] as const
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// ICFToken
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+export const icfTokenAbi = [
+  {
+    type: 'function',
+    inputs: [
+      { name: '', internalType: 'address', type: 'address' },
+      { name: '', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'transfer',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: '', internalType: 'address', type: 'address' },
+      { name: '', internalType: 'address', type: 'address' },
+      { name: '', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'transferFrom',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'nonpayable',
   },
 ] as const
 
@@ -1287,6 +1748,436 @@ export const ownableAbi = [
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link cfTokenAbi}__
+ */
+export const useReadCfToken = /*#__PURE__*/ createUseReadContract({
+  abi: cfTokenAbi,
+})
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link cfTokenAbi}__ and `functionName` set to `"allowance"`
+ */
+export const useReadCfTokenAllowance = /*#__PURE__*/ createUseReadContract({
+  abi: cfTokenAbi,
+  functionName: 'allowance',
+})
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link cfTokenAbi}__ and `functionName` set to `"balanceOf"`
+ */
+export const useReadCfTokenBalanceOf = /*#__PURE__*/ createUseReadContract({
+  abi: cfTokenAbi,
+  functionName: 'balanceOf',
+})
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link cfTokenAbi}__ and `functionName` set to `"decimals"`
+ */
+export const useReadCfTokenDecimals = /*#__PURE__*/ createUseReadContract({
+  abi: cfTokenAbi,
+  functionName: 'decimals',
+})
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link cfTokenAbi}__ and `functionName` set to `"name"`
+ */
+export const useReadCfTokenName = /*#__PURE__*/ createUseReadContract({
+  abi: cfTokenAbi,
+  functionName: 'name',
+})
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link cfTokenAbi}__ and `functionName` set to `"owner"`
+ */
+export const useReadCfTokenOwner = /*#__PURE__*/ createUseReadContract({
+  abi: cfTokenAbi,
+  functionName: 'owner',
+})
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link cfTokenAbi}__ and `functionName` set to `"symbol"`
+ */
+export const useReadCfTokenSymbol = /*#__PURE__*/ createUseReadContract({
+  abi: cfTokenAbi,
+  functionName: 'symbol',
+})
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link cfTokenAbi}__ and `functionName` set to `"totalSupply"`
+ */
+export const useReadCfTokenTotalSupply = /*#__PURE__*/ createUseReadContract({
+  abi: cfTokenAbi,
+  functionName: 'totalSupply',
+})
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link cfTokenAbi}__
+ */
+export const useWriteCfToken = /*#__PURE__*/ createUseWriteContract({
+  abi: cfTokenAbi,
+})
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link cfTokenAbi}__ and `functionName` set to `"approve"`
+ */
+export const useWriteCfTokenApprove = /*#__PURE__*/ createUseWriteContract({
+  abi: cfTokenAbi,
+  functionName: 'approve',
+})
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link cfTokenAbi}__ and `functionName` set to `"mint"`
+ */
+export const useWriteCfTokenMint = /*#__PURE__*/ createUseWriteContract({
+  abi: cfTokenAbi,
+  functionName: 'mint',
+})
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link cfTokenAbi}__ and `functionName` set to `"renounceOwnership"`
+ */
+export const useWriteCfTokenRenounceOwnership =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: cfTokenAbi,
+    functionName: 'renounceOwnership',
+  })
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link cfTokenAbi}__ and `functionName` set to `"transfer"`
+ */
+export const useWriteCfTokenTransfer = /*#__PURE__*/ createUseWriteContract({
+  abi: cfTokenAbi,
+  functionName: 'transfer',
+})
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link cfTokenAbi}__ and `functionName` set to `"transferFrom"`
+ */
+export const useWriteCfTokenTransferFrom = /*#__PURE__*/ createUseWriteContract(
+  { abi: cfTokenAbi, functionName: 'transferFrom' },
+)
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link cfTokenAbi}__ and `functionName` set to `"transferOwnership"`
+ */
+export const useWriteCfTokenTransferOwnership =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: cfTokenAbi,
+    functionName: 'transferOwnership',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link cfTokenAbi}__
+ */
+export const useSimulateCfToken = /*#__PURE__*/ createUseSimulateContract({
+  abi: cfTokenAbi,
+})
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link cfTokenAbi}__ and `functionName` set to `"approve"`
+ */
+export const useSimulateCfTokenApprove =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: cfTokenAbi,
+    functionName: 'approve',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link cfTokenAbi}__ and `functionName` set to `"mint"`
+ */
+export const useSimulateCfTokenMint = /*#__PURE__*/ createUseSimulateContract({
+  abi: cfTokenAbi,
+  functionName: 'mint',
+})
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link cfTokenAbi}__ and `functionName` set to `"renounceOwnership"`
+ */
+export const useSimulateCfTokenRenounceOwnership =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: cfTokenAbi,
+    functionName: 'renounceOwnership',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link cfTokenAbi}__ and `functionName` set to `"transfer"`
+ */
+export const useSimulateCfTokenTransfer =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: cfTokenAbi,
+    functionName: 'transfer',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link cfTokenAbi}__ and `functionName` set to `"transferFrom"`
+ */
+export const useSimulateCfTokenTransferFrom =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: cfTokenAbi,
+    functionName: 'transferFrom',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link cfTokenAbi}__ and `functionName` set to `"transferOwnership"`
+ */
+export const useSimulateCfTokenTransferOwnership =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: cfTokenAbi,
+    functionName: 'transferOwnership',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link cfTokenAbi}__
+ */
+export const useWatchCfTokenEvent = /*#__PURE__*/ createUseWatchContractEvent({
+  abi: cfTokenAbi,
+})
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link cfTokenAbi}__ and `eventName` set to `"Approval"`
+ */
+export const useWatchCfTokenApprovalEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: cfTokenAbi,
+    eventName: 'Approval',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link cfTokenAbi}__ and `eventName` set to `"OwnershipTransferred"`
+ */
+export const useWatchCfTokenOwnershipTransferredEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: cfTokenAbi,
+    eventName: 'OwnershipTransferred',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link cfTokenAbi}__ and `eventName` set to `"Transfer"`
+ */
+export const useWatchCfTokenTransferEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: cfTokenAbi,
+    eventName: 'Transfer',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link crowdFundAbi}__
+ */
+export const useReadCrowdFund = /*#__PURE__*/ createUseReadContract({
+  abi: crowdFundAbi,
+})
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link crowdFundAbi}__ and `functionName` set to `"campaigns"`
+ */
+export const useReadCrowdFundCampaigns = /*#__PURE__*/ createUseReadContract({
+  abi: crowdFundAbi,
+  functionName: 'campaigns',
+})
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link crowdFundAbi}__ and `functionName` set to `"count"`
+ */
+export const useReadCrowdFundCount = /*#__PURE__*/ createUseReadContract({
+  abi: crowdFundAbi,
+  functionName: 'count',
+})
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link crowdFundAbi}__ and `functionName` set to `"pledgedAmount"`
+ */
+export const useReadCrowdFundPledgedAmount =
+  /*#__PURE__*/ createUseReadContract({
+    abi: crowdFundAbi,
+    functionName: 'pledgedAmount',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link crowdFundAbi}__ and `functionName` set to `"token"`
+ */
+export const useReadCrowdFundToken = /*#__PURE__*/ createUseReadContract({
+  abi: crowdFundAbi,
+  functionName: 'token',
+})
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link crowdFundAbi}__
+ */
+export const useWriteCrowdFund = /*#__PURE__*/ createUseWriteContract({
+  abi: crowdFundAbi,
+})
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link crowdFundAbi}__ and `functionName` set to `"cancel"`
+ */
+export const useWriteCrowdFundCancel = /*#__PURE__*/ createUseWriteContract({
+  abi: crowdFundAbi,
+  functionName: 'cancel',
+})
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link crowdFundAbi}__ and `functionName` set to `"claim"`
+ */
+export const useWriteCrowdFundClaim = /*#__PURE__*/ createUseWriteContract({
+  abi: crowdFundAbi,
+  functionName: 'claim',
+})
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link crowdFundAbi}__ and `functionName` set to `"launch"`
+ */
+export const useWriteCrowdFundLaunch = /*#__PURE__*/ createUseWriteContract({
+  abi: crowdFundAbi,
+  functionName: 'launch',
+})
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link crowdFundAbi}__ and `functionName` set to `"pledge"`
+ */
+export const useWriteCrowdFundPledge = /*#__PURE__*/ createUseWriteContract({
+  abi: crowdFundAbi,
+  functionName: 'pledge',
+})
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link crowdFundAbi}__ and `functionName` set to `"refund"`
+ */
+export const useWriteCrowdFundRefund = /*#__PURE__*/ createUseWriteContract({
+  abi: crowdFundAbi,
+  functionName: 'refund',
+})
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link crowdFundAbi}__ and `functionName` set to `"unpledge"`
+ */
+export const useWriteCrowdFundUnpledge = /*#__PURE__*/ createUseWriteContract({
+  abi: crowdFundAbi,
+  functionName: 'unpledge',
+})
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link crowdFundAbi}__
+ */
+export const useSimulateCrowdFund = /*#__PURE__*/ createUseSimulateContract({
+  abi: crowdFundAbi,
+})
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link crowdFundAbi}__ and `functionName` set to `"cancel"`
+ */
+export const useSimulateCrowdFundCancel =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: crowdFundAbi,
+    functionName: 'cancel',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link crowdFundAbi}__ and `functionName` set to `"claim"`
+ */
+export const useSimulateCrowdFundClaim =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: crowdFundAbi,
+    functionName: 'claim',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link crowdFundAbi}__ and `functionName` set to `"launch"`
+ */
+export const useSimulateCrowdFundLaunch =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: crowdFundAbi,
+    functionName: 'launch',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link crowdFundAbi}__ and `functionName` set to `"pledge"`
+ */
+export const useSimulateCrowdFundPledge =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: crowdFundAbi,
+    functionName: 'pledge',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link crowdFundAbi}__ and `functionName` set to `"refund"`
+ */
+export const useSimulateCrowdFundRefund =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: crowdFundAbi,
+    functionName: 'refund',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link crowdFundAbi}__ and `functionName` set to `"unpledge"`
+ */
+export const useSimulateCrowdFundUnpledge =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: crowdFundAbi,
+    functionName: 'unpledge',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link crowdFundAbi}__
+ */
+export const useWatchCrowdFundEvent = /*#__PURE__*/ createUseWatchContractEvent(
+  { abi: crowdFundAbi },
+)
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link crowdFundAbi}__ and `eventName` set to `"Cancel"`
+ */
+export const useWatchCrowdFundCancelEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: crowdFundAbi,
+    eventName: 'Cancel',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link crowdFundAbi}__ and `eventName` set to `"Claim"`
+ */
+export const useWatchCrowdFundClaimEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: crowdFundAbi,
+    eventName: 'Claim',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link crowdFundAbi}__ and `eventName` set to `"Launch"`
+ */
+export const useWatchCrowdFundLaunchEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: crowdFundAbi,
+    eventName: 'Launch',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link crowdFundAbi}__ and `eventName` set to `"Pledge"`
+ */
+export const useWatchCrowdFundPledgeEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: crowdFundAbi,
+    eventName: 'Pledge',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link crowdFundAbi}__ and `eventName` set to `"Refund"`
+ */
+export const useWatchCrowdFundRefundEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: crowdFundAbi,
+    eventName: 'Refund',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link crowdFundAbi}__ and `eventName` set to `"Unpledge"`
+ */
+export const useWatchCrowdFundUnpledgeEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: crowdFundAbi,
+    eventName: 'Unpledge',
+  })
+
+/**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link erc20Abi}__
  */
 export const useReadErc20 = /*#__PURE__*/ createUseReadContract({
@@ -1426,6 +2317,55 @@ export const useWatchErc20TransferEvent =
   /*#__PURE__*/ createUseWatchContractEvent({
     abi: erc20Abi,
     eventName: 'Transfer',
+  })
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link icfTokenAbi}__
+ */
+export const useWriteIcfToken = /*#__PURE__*/ createUseWriteContract({
+  abi: icfTokenAbi,
+})
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link icfTokenAbi}__ and `functionName` set to `"transfer"`
+ */
+export const useWriteIcfTokenTransfer = /*#__PURE__*/ createUseWriteContract({
+  abi: icfTokenAbi,
+  functionName: 'transfer',
+})
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link icfTokenAbi}__ and `functionName` set to `"transferFrom"`
+ */
+export const useWriteIcfTokenTransferFrom =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: icfTokenAbi,
+    functionName: 'transferFrom',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link icfTokenAbi}__
+ */
+export const useSimulateIcfToken = /*#__PURE__*/ createUseSimulateContract({
+  abi: icfTokenAbi,
+})
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link icfTokenAbi}__ and `functionName` set to `"transfer"`
+ */
+export const useSimulateIcfTokenTransfer =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: icfTokenAbi,
+    functionName: 'transfer',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link icfTokenAbi}__ and `functionName` set to `"transferFrom"`
+ */
+export const useSimulateIcfTokenTransferFrom =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: icfTokenAbi,
+    functionName: 'transferFrom',
   })
 
 /**

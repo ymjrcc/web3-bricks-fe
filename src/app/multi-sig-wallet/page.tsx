@@ -197,7 +197,7 @@ const Page = () => {
       </ul>
 
       <div className="mb-8">
-        <div className="text-gray-400">Owners: </div>
+        <div className="text-xl font-bold  text-gray-400 mt-4">Owners: </div>
         <ul className="list-disc ml-6">
           {
             owners?.map((owner, index) => (
@@ -248,7 +248,7 @@ const Page = () => {
 
       </div>
 
-      <div className="text-gray-400 mb-2">Transactions: </div>
+      <div className="text-xl font-bold  text-gray-400 mt-4 mb-2">Transactions: </div>
       <Table aria-label="Example table with dynamic content">
         <TableHeader columns={columns}>
           {(column) => <TableColumn key={column.key}>{column.label}</TableColumn>}
