@@ -134,7 +134,7 @@ const Page = () => {
       </ul>
       <div className="flex justify-between items-center">
         <div className='text-xl font-bold  text-gray-400 mb-2 mt-4'>Campaigns List:</div>
-        <Button size="sm" color="primary" variant="flat" onClick={onCreate}>Create New Campaign</Button>
+        <Button size="sm" color="warning" variant="flat" onClick={onCreate}>Create New Campaign</Button>
       </div>
       <Table aria-label="Example static collection table">
         <TableHeader>
@@ -155,7 +155,7 @@ const Page = () => {
                 <TableCell>{row.pledged}</TableCell>
                 <TableCell>{row.claimed.toString()}</TableCell>
                 <TableCell>
-                  <Link href={`/crowd-fund/${row.id}`}>Detail</Link>
+                  <Link href={`/crowd-fund/${row.id}`} className="text-orange-500" underline="hover">Detail</Link>
                 </TableCell>
               </TableRow>
             ))
