@@ -1,9 +1,12 @@
 'use client'
-import { Breadcrumbs, BreadcrumbItem, Card, CardHeader, CardBody, CardFooter, Divider, Link, Image, Progress, Button } from "@nextui-org/react";
+import { 
+  Breadcrumbs, BreadcrumbItem, Card, CardHeader, CardBody, Divider, Progress, Button, Code,
+  Table, TableHeader, TableColumn, TableBody, TableRow, TableCell,
+} from "@nextui-org/react";
 import { useWriteCrowdFund, useReadCrowdFund, crowdFundAbi } from "@/utils/contracts";
 import { useEffect, useState } from "react";
-import { formatUnits, parseEther } from "viem";
-import { useWaitForTransactionReceipt } from "wagmi";
+import { formatUnits, parseAbiItem, parseEther } from "viem";
+import { useAccount, usePublicClient, useWaitForTransactionReceipt } from "wagmi";
 import toast from "react-hot-toast";
 
 const contractAddress = '0x0165878a594ca255338adfa4d48449f69242eb8f' as const
@@ -24,9 +27,12 @@ function formatTimestamp(timestamp: number): string {
 
 const Page = ({ params }: { params: { id: string } }) => {
 
+  const { address} = useAccount()
   const { data: hash, writeContractAsync: writeCrowdFund, isPending } = useWriteCrowdFund()
   const { isLoading, isSuccess } = useWaitForTransactionReceipt({ hash });
-  const [currentAction, setCurrentAction] = useState<'pledge' | 'claim' | 'refund'>('pledge')
+  const [currentAction, setCurrentAction] = useState<'pledge' | 'claim' | 'refund' | 'unpledge'>('pledge')
+  const [logs, setLogs] = useState<any[]>([])
+  const publicClient = usePublicClient()
 
   const { data: campaign, refetch: refetchCampaign } = useReadCrowdFund({
     address: contractAddress,
@@ -94,9 +100,44 @@ const Page = ({ params }: { params: { id: string } }) => {
     })
   }
 
+  const onUnpledge = async (amount: bigint) => {
+    setCurrentAction('unpledge')
+    await writeCrowdFund({
+      address: contractAddress,
+      functionName: 'unpledge',
+      args: [BigInt(params.id), amount]
+    },{
+      onSuccess: () => {
+        toast.success('Unpledged successfully')
+      },
+      onError: (error) => {
+        toast.error(error.message, {
+          style: {
+            wordBreak: 'break-all'
+          }
+        })
+      }
+    })
+  }
+
+  const getLogs = async () => {
+    if(!publicClient) return
+    const _logs = await publicClient.getLogs({
+      address: contractAddress,
+      event: parseAbiItem('event Pledge(uint256 indexed id, address indexed caller, uint256 amount)'),
+      args: {
+        id: BigInt(params.id)
+      },
+      fromBlock: BigInt(0),
+      toBlock: 'latest'
+    })
+    setLogs(_logs)
+    console.log(_logs);
+  }
+
   useEffect(() => {
-    console.log(campaign);
-  }, [campaign])
+    getLogs()
+  }, [campaign, isSuccess])
 
   useEffect(() => {
     if(isSuccess) {
@@ -175,7 +216,9 @@ const Page = ({ params }: { params: { id: string } }) => {
           </CardHeader>
           <Divider />
           <CardBody>
-            <div>{campaign?.[0]}</div>
+            <div>
+              <Code>{campaign?.[0]}</Code>
+            </div>
           </CardBody>
         </Card>
         <Card className="flex-1">
@@ -200,7 +243,36 @@ const Page = ({ params }: { params: { id: string } }) => {
       </div>
 
       <div className='text-xl font-bold  text-gray-400 mb-2 mt-6'>Pledge Records:</div>
-      
+      <Table aria-label="Pledge records table">
+        <TableHeader>
+          <TableColumn>Pledger Address</TableColumn>
+          <TableColumn>Pledge Time</TableColumn>
+          <TableColumn>Amount (CWT)</TableColumn>
+          {/* <TableColumn>Action</TableColumn> */}
+        </TableHeader>
+        <TableBody>
+          {logs.map((log, index) => (
+            <TableRow key={index}>
+              <TableCell>
+                <Code>{log.args.caller}</Code>
+              </TableCell>
+              <TableCell>{formatTimestamp(parseInt(log.blockTimestamp.slice(2),16))}</TableCell>
+              <TableCell>{formatUnits(log.args.amount, 18)}</TableCell>
+              {/* <TableCell>
+                {
+                  log.args.caller === address ? (
+                    <Button 
+                      color="warning" variant="flat" size="sm"
+                      isLoading={(isPending || isLoading) && currentAction === 'unpledge'}
+                      onClick={() => onUnpledge(log.args.amount)}
+                    >Unpledge</Button>
+                  ) : '-'
+                }
+              </TableCell> */}
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
 
     </>
   )
