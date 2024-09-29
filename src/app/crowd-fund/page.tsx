@@ -4,16 +4,17 @@ import { parseEther, formatUnits } from "viem";
 import toast from "react-hot-toast";
 import {
   Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure,
-  Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, 
-  Link, Button, Input, DatePicker, Code, Chip
- } from "@nextui-org/react";
- import { now, getLocalTimeZone } from "@internationalized/date";
- import { useReadContracts, useWaitForTransactionReceipt } from 'wagmi';
-import { useWriteCrowdFund, useReadCrowdFund, crowdFundAbi } from "@/utils/contracts";
+  Table, TableHeader, TableColumn, TableBody, TableRow, TableCell,
+  Link, Button, Input, DatePicker, Code, Chip, Tooltip
+} from "@nextui-org/react";
+import { now, getLocalTimeZone } from "@internationalized/date";
+import { useAccount, useReadContracts, useWaitForTransactionReceipt } from 'wagmi';
+import { useWriteCrowdFund, useReadCrowdFund, crowdFundAbi, useReadCfToken, useWriteCfToken } from "@/utils/contracts";
 import clsx from "clsx";
+import { BadgeDollarSign } from "lucide-react";
 
-const contractAddress = '0x0165878a594ca255338adfa4d48449f69242eb8f' as const
-const erc20Address = '0x5FC8d32690cc91D4c39d9d3abcBD16989F875707' as const
+const contractAddress = '0xE2a72525Dc19E416382F142b8d4650cFa102838E' as const
+const erc20Address = '0x4A6490eb1d5ebFE42AAe0bea56d9Ba4e67A3d4d0' as const
 
 const info = [
   { key: 'Name', value: 'Crowd Fund' },
@@ -30,11 +31,30 @@ const Page = () => {
   const [currentTime, setCurrentTime] = useState(Date.now())
   const [goal, setGoal] = useState('')
   const [rows, setRows] = useState<any[]>([])
-  const [startTime, setStartTime] = useState(now(getLocalTimeZone()).add({hours: 1}))
-  const [endTime, setEndTime] = useState(now(getLocalTimeZone()).add({hours: 1, weeks: 1}))
+  const [startTime, setStartTime] = useState(now(getLocalTimeZone()).add({ hours: 1 }))
+  const [endTime, setEndTime] = useState(now(getLocalTimeZone()).add({ hours: 1, weeks: 1 }))
+  const { address } = useAccount()
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const { data: hash, writeContractAsync: writeCrowdFund, isPending } = useWriteCrowdFund()
+  const { data: hashCfToken, writeContractAsync: writeCfToken, isPending: isPendingCfToken } = useWriteCfToken()
   const { isLoading, isSuccess } = useWaitForTransactionReceipt({ hash });
+  const { isLoading: isLoadingCfToken, isSuccess: isSuccessCfToken } = useWaitForTransactionReceipt({ hash: hashCfToken });
+
+  const { data: balance, refetch: refetchBalance } = useReadCfToken({
+    address: erc20Address,
+    functionName: 'balanceOf',
+    args: [address as `0x${string}`],
+  })
+
+  const formatBalance = useMemo(() => {
+    let formatBalance = balance ? (Number(balance) / (10 ** 18)).toString() : '0'
+    if(Math.abs(Math.round(Number(formatBalance)) - Number(formatBalance)) < 0.000001) {
+      formatBalance = Math.round(Number(formatBalance)).toString()
+    } else {
+      formatBalance = Number(formatBalance).toFixed(6)
+    }
+    return formatBalance
+  }, [balance])
 
   const { data: count, refetch: refetchCount } = useReadCrowdFund({
     address: contractAddress,
@@ -56,14 +76,20 @@ const Page = () => {
   })
 
   useEffect(() => {
-    if(list.length > 0) {
+    if (list.length > 0) {
       refetchCampaigns()
     }
   }, [list])
 
   useEffect(() => {
+    if (isSuccessCfToken) {
+      refetchBalance()
+    }
+  }, [isSuccessCfToken])
+
+  useEffect(() => {
     const _rows = campaigns?.map((campaign: any, index: number) => {
-      if(campaign.status === 'success' && campaign.result) {
+      if (campaign.status === 'success' && campaign.result) {
         const startTime = Number(campaign.result[3]) * 1000
         const endTime = Number(campaign.result[4]) * 1000
         let status = 'Not Started'
@@ -87,7 +113,7 @@ const Page = () => {
   }, [campaigns])
 
   useEffect(() => {
-    if(!isPending) {
+    if (!isPending) {
       refetchCount()
     }
   }, [isPending])
@@ -102,9 +128,8 @@ const Page = () => {
       address: contractAddress,
       functionName: 'launch',
       args: [_goal, _startTime, _endTime],
-    },{
+    }, {
       onSuccess: (data) => {
-        console.log('success', data)
         toast.success('Launch success')
         onClose()
       },
@@ -120,9 +145,32 @@ const Page = () => {
 
   const onCreate = () => {
     setGoal('')
-    setStartTime(now(getLocalTimeZone()).add({hours: 1}))
-    setEndTime(now(getLocalTimeZone()).add({hours: 1, weeks: 1}))
+    setStartTime(now(getLocalTimeZone()).add({ hours: 1 }))
+    setEndTime(now(getLocalTimeZone()).add({ hours: 1, weeks: 1 }))
     onOpen()
+  }
+
+  const onMint = async () => {
+    if (!address) {
+      toast.error('Please connect wallet first')
+      return
+    }
+    await writeCfToken({
+      address: erc20Address,
+      functionName: 'mint',
+      args: [address as `0x${string}`, parseEther('1000')],
+    }, {
+      onSuccess: (data) => {
+        toast.success('Mint success')
+      },
+      onError: (error) => {
+        toast.error(error.message, {
+          style: {
+            wordBreak: 'break-all'
+          }
+        })
+      }
+    })
   }
 
   return (
@@ -175,7 +223,11 @@ const Page = () => {
                   </Chip>
                 </TableCell>
                 <TableCell>
-                  <span className={clsx(row.claimed && 'text-green-500 font-bold')}>{row.claimed? 'Yes' : 'No'}</span>
+                  {
+                    row.status === 'Ended' ?
+                      <span className={clsx(row.claimed && 'text-green-500 font-bold')}>{row.claimed ? 'Yes' : 'No'}</span>
+                      : '-'
+                  }
                 </TableCell>
                 <TableCell>
                   <Link href={`/crowd-fund/${row.id}`} className="text-orange-500" underline="hover">Detail</Link>
@@ -185,14 +237,32 @@ const Page = () => {
           }
         </TableBody>
       </Table>
+
+      <div className='text-xl font-bold  text-gray-400 mb-2 mt-8'>CFT Token:</div>
+      <div className="flex items-center">
+        <Input 
+          isReadOnly label='balance' variant="bordered"
+          value={formatBalance}
+          endContent={<BadgeDollarSign className='text-amber-500'/>}
+          size="sm"
+          className="max-w-xs mr-4"
+        />
+        <Tooltip content="Get 1000 CWToken for free!" color="primary" placement="bottom-start">
+          <Button 
+            color="primary" variant="flat" onClick={onMint}
+            isLoading={isLoadingCfToken || isPendingCfToken}
+          >Faucet</Button>
+        </Tooltip>
+      </div>
+
       <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
         <ModalContent>
           {(onClose) => (
             <>
               <ModalHeader className="flex flex-col gap-1">Create New Campaign</ModalHeader>
               <ModalBody>
-                <Input 
-                  type="number" variant="bordered" label="Goal" 
+                <Input
+                  type="number" variant="bordered" label="Goal"
                   value={goal}
                   onChange={(e) => setGoal(e.target.value)}
                 />
@@ -217,7 +287,7 @@ const Page = () => {
                 <Button color="danger" variant="light" onPress={onClose}>
                   Close
                 </Button>
-                <Button 
+                <Button
                   color="primary" onPress={onLaunch}
                   isLoading={isPending || isLoading}
                 >

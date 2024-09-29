@@ -19,6 +19,13 @@ export const cfTokenAbi = [
   },
   {
     type: 'function',
+    inputs: [],
+    name: 'DOMAIN_SEPARATOR',
+    outputs: [{ name: '', internalType: 'bytes32', type: 'bytes32' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
     inputs: [
       { name: 'owner', internalType: 'address', type: 'address' },
       { name: 'spender', internalType: 'address', type: 'address' },
@@ -46,9 +53,41 @@ export const cfTokenAbi = [
   },
   {
     type: 'function',
+    inputs: [{ name: 'value', internalType: 'uint256', type: 'uint256' }],
+    name: 'burn',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'account', internalType: 'address', type: 'address' },
+      { name: 'value', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'burnFrom',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
     inputs: [],
     name: 'decimals',
     outputs: [{ name: '', internalType: 'uint8', type: 'uint8' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'eip712Domain',
+    outputs: [
+      { name: 'fields', internalType: 'bytes1', type: 'bytes1' },
+      { name: 'name', internalType: 'string', type: 'string' },
+      { name: 'version', internalType: 'string', type: 'string' },
+      { name: 'chainId', internalType: 'uint256', type: 'uint256' },
+      { name: 'verifyingContract', internalType: 'address', type: 'address' },
+      { name: 'salt', internalType: 'bytes32', type: 'bytes32' },
+      { name: 'extensions', internalType: 'uint256[]', type: 'uint256[]' },
+    ],
     stateMutability: 'view',
   },
   {
@@ -70,10 +109,32 @@ export const cfTokenAbi = [
   },
   {
     type: 'function',
+    inputs: [{ name: 'owner', internalType: 'address', type: 'address' }],
+    name: 'nonces',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
     inputs: [],
     name: 'owner',
     outputs: [{ name: '', internalType: 'address', type: 'address' }],
     stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'owner', internalType: 'address', type: 'address' },
+      { name: 'spender', internalType: 'address', type: 'address' },
+      { name: 'value', internalType: 'uint256', type: 'uint256' },
+      { name: 'deadline', internalType: 'uint256', type: 'uint256' },
+      { name: 'v', internalType: 'uint8', type: 'uint8' },
+      { name: 'r', internalType: 'bytes32', type: 'bytes32' },
+      { name: 's', internalType: 'bytes32', type: 'bytes32' },
+    ],
+    name: 'permit',
+    outputs: [],
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -149,6 +210,7 @@ export const cfTokenAbi = [
     ],
     name: 'Approval',
   },
+  { type: 'event', anonymous: false, inputs: [], name: 'EIP712DomainChanged' },
   {
     type: 'event',
     anonymous: false,
@@ -182,6 +244,17 @@ export const cfTokenAbi = [
       },
     ],
     name: 'Transfer',
+  },
+  { type: 'error', inputs: [], name: 'ECDSAInvalidSignature' },
+  {
+    type: 'error',
+    inputs: [{ name: 'length', internalType: 'uint256', type: 'uint256' }],
+    name: 'ECDSAInvalidSignatureLength',
+  },
+  {
+    type: 'error',
+    inputs: [{ name: 's', internalType: 'bytes32', type: 'bytes32' }],
+    name: 'ECDSAInvalidSignatureS',
   },
   {
     type: 'error',
@@ -223,6 +296,28 @@ export const cfTokenAbi = [
   },
   {
     type: 'error',
+    inputs: [{ name: 'deadline', internalType: 'uint256', type: 'uint256' }],
+    name: 'ERC2612ExpiredSignature',
+  },
+  {
+    type: 'error',
+    inputs: [
+      { name: 'signer', internalType: 'address', type: 'address' },
+      { name: 'owner', internalType: 'address', type: 'address' },
+    ],
+    name: 'ERC2612InvalidSigner',
+  },
+  {
+    type: 'error',
+    inputs: [
+      { name: 'account', internalType: 'address', type: 'address' },
+      { name: 'currentNonce', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'InvalidAccountNonce',
+  },
+  { type: 'error', inputs: [], name: 'InvalidShortString' },
+  {
+    type: 'error',
     inputs: [{ name: 'owner', internalType: 'address', type: 'address' }],
     name: 'OwnableInvalidOwner',
   },
@@ -230,6 +325,11 @@ export const cfTokenAbi = [
     type: 'error',
     inputs: [{ name: 'account', internalType: 'address', type: 'address' }],
     name: 'OwnableUnauthorizedAccount',
+  },
+  {
+    type: 'error',
+    inputs: [{ name: 'str', internalType: 'string', type: 'string' }],
+    name: 'StringTooLong',
   },
 ] as const
 
@@ -286,6 +386,20 @@ export const crowdFundAbi = [
       { name: '_endAt', internalType: 'uint32', type: 'uint32' },
     ],
     name: 'launch',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: '_id', internalType: 'uint256', type: 'uint256' },
+      { name: '_amount', internalType: 'uint256', type: 'uint256' },
+      { name: '_deadline', internalType: 'uint256', type: 'uint256' },
+      { name: '_v', internalType: 'uint8', type: 'uint8' },
+      { name: '_r', internalType: 'bytes32', type: 'bytes32' },
+      { name: '_s', internalType: 'bytes32', type: 'bytes32' },
+    ],
+    name: 'permitPledge',
     outputs: [],
     stateMutability: 'nonpayable',
   },
@@ -435,6 +549,53 @@ export const crowdFundAbi = [
       },
     ],
     name: 'Unpledge',
+  },
+] as const
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// ECDSA
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+export const ecdsaAbi = [
+  { type: 'error', inputs: [], name: 'ECDSAInvalidSignature' },
+  {
+    type: 'error',
+    inputs: [{ name: 'length', internalType: 'uint256', type: 'uint256' }],
+    name: 'ECDSAInvalidSignatureLength',
+  },
+  {
+    type: 'error',
+    inputs: [{ name: 's', internalType: 'bytes32', type: 'bytes32' }],
+    name: 'ECDSAInvalidSignatureS',
+  },
+] as const
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// EIP712
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+export const eip712Abi = [
+  {
+    type: 'function',
+    inputs: [],
+    name: 'eip712Domain',
+    outputs: [
+      { name: 'fields', internalType: 'bytes1', type: 'bytes1' },
+      { name: 'name', internalType: 'string', type: 'string' },
+      { name: 'version', internalType: 'string', type: 'string' },
+      { name: 'chainId', internalType: 'uint256', type: 'uint256' },
+      { name: 'verifyingContract', internalType: 'address', type: 'address' },
+      { name: 'salt', internalType: 'bytes32', type: 'bytes32' },
+      { name: 'extensions', internalType: 'uint256[]', type: 'uint256[]' },
+    ],
+    stateMutability: 'view',
+  },
+  { type: 'event', anonymous: false, inputs: [], name: 'EIP712DomainChanged' },
+  { type: 'error', inputs: [], name: 'InvalidShortString' },
+  {
+    type: 'error',
+    inputs: [{ name: 'str', internalType: 'string', type: 'string' }],
+    name: 'StringTooLong',
   },
 ] as const
 
@@ -600,10 +761,461 @@ export const erc20Abi = [
 ] as const
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// ERC20Burnable
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+export const erc20BurnableAbi = [
+  {
+    type: 'function',
+    inputs: [
+      { name: 'owner', internalType: 'address', type: 'address' },
+      { name: 'spender', internalType: 'address', type: 'address' },
+    ],
+    name: 'allowance',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'spender', internalType: 'address', type: 'address' },
+      { name: 'value', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'approve',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'account', internalType: 'address', type: 'address' }],
+    name: 'balanceOf',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'value', internalType: 'uint256', type: 'uint256' }],
+    name: 'burn',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'account', internalType: 'address', type: 'address' },
+      { name: 'value', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'burnFrom',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'decimals',
+    outputs: [{ name: '', internalType: 'uint8', type: 'uint8' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'name',
+    outputs: [{ name: '', internalType: 'string', type: 'string' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'symbol',
+    outputs: [{ name: '', internalType: 'string', type: 'string' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'totalSupply',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'to', internalType: 'address', type: 'address' },
+      { name: 'value', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'transfer',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'from', internalType: 'address', type: 'address' },
+      { name: 'to', internalType: 'address', type: 'address' },
+      { name: 'value', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'transferFrom',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'owner',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+      {
+        name: 'spender',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+      {
+        name: 'value',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+    ],
+    name: 'Approval',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      { name: 'from', internalType: 'address', type: 'address', indexed: true },
+      { name: 'to', internalType: 'address', type: 'address', indexed: true },
+      {
+        name: 'value',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+    ],
+    name: 'Transfer',
+  },
+  {
+    type: 'error',
+    inputs: [
+      { name: 'spender', internalType: 'address', type: 'address' },
+      { name: 'allowance', internalType: 'uint256', type: 'uint256' },
+      { name: 'needed', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'ERC20InsufficientAllowance',
+  },
+  {
+    type: 'error',
+    inputs: [
+      { name: 'sender', internalType: 'address', type: 'address' },
+      { name: 'balance', internalType: 'uint256', type: 'uint256' },
+      { name: 'needed', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'ERC20InsufficientBalance',
+  },
+  {
+    type: 'error',
+    inputs: [{ name: 'approver', internalType: 'address', type: 'address' }],
+    name: 'ERC20InvalidApprover',
+  },
+  {
+    type: 'error',
+    inputs: [{ name: 'receiver', internalType: 'address', type: 'address' }],
+    name: 'ERC20InvalidReceiver',
+  },
+  {
+    type: 'error',
+    inputs: [{ name: 'sender', internalType: 'address', type: 'address' }],
+    name: 'ERC20InvalidSender',
+  },
+  {
+    type: 'error',
+    inputs: [{ name: 'spender', internalType: 'address', type: 'address' }],
+    name: 'ERC20InvalidSpender',
+  },
+] as const
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// ERC20Permit
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+export const erc20PermitAbi = [
+  {
+    type: 'function',
+    inputs: [],
+    name: 'DOMAIN_SEPARATOR',
+    outputs: [{ name: '', internalType: 'bytes32', type: 'bytes32' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'owner', internalType: 'address', type: 'address' },
+      { name: 'spender', internalType: 'address', type: 'address' },
+    ],
+    name: 'allowance',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'spender', internalType: 'address', type: 'address' },
+      { name: 'value', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'approve',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'account', internalType: 'address', type: 'address' }],
+    name: 'balanceOf',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'decimals',
+    outputs: [{ name: '', internalType: 'uint8', type: 'uint8' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'eip712Domain',
+    outputs: [
+      { name: 'fields', internalType: 'bytes1', type: 'bytes1' },
+      { name: 'name', internalType: 'string', type: 'string' },
+      { name: 'version', internalType: 'string', type: 'string' },
+      { name: 'chainId', internalType: 'uint256', type: 'uint256' },
+      { name: 'verifyingContract', internalType: 'address', type: 'address' },
+      { name: 'salt', internalType: 'bytes32', type: 'bytes32' },
+      { name: 'extensions', internalType: 'uint256[]', type: 'uint256[]' },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'name',
+    outputs: [{ name: '', internalType: 'string', type: 'string' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'owner', internalType: 'address', type: 'address' }],
+    name: 'nonces',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'owner', internalType: 'address', type: 'address' },
+      { name: 'spender', internalType: 'address', type: 'address' },
+      { name: 'value', internalType: 'uint256', type: 'uint256' },
+      { name: 'deadline', internalType: 'uint256', type: 'uint256' },
+      { name: 'v', internalType: 'uint8', type: 'uint8' },
+      { name: 'r', internalType: 'bytes32', type: 'bytes32' },
+      { name: 's', internalType: 'bytes32', type: 'bytes32' },
+    ],
+    name: 'permit',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'symbol',
+    outputs: [{ name: '', internalType: 'string', type: 'string' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'totalSupply',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'to', internalType: 'address', type: 'address' },
+      { name: 'value', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'transfer',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'from', internalType: 'address', type: 'address' },
+      { name: 'to', internalType: 'address', type: 'address' },
+      { name: 'value', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'transferFrom',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'owner',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+      {
+        name: 'spender',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+      {
+        name: 'value',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+    ],
+    name: 'Approval',
+  },
+  { type: 'event', anonymous: false, inputs: [], name: 'EIP712DomainChanged' },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      { name: 'from', internalType: 'address', type: 'address', indexed: true },
+      { name: 'to', internalType: 'address', type: 'address', indexed: true },
+      {
+        name: 'value',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+    ],
+    name: 'Transfer',
+  },
+  { type: 'error', inputs: [], name: 'ECDSAInvalidSignature' },
+  {
+    type: 'error',
+    inputs: [{ name: 'length', internalType: 'uint256', type: 'uint256' }],
+    name: 'ECDSAInvalidSignatureLength',
+  },
+  {
+    type: 'error',
+    inputs: [{ name: 's', internalType: 'bytes32', type: 'bytes32' }],
+    name: 'ECDSAInvalidSignatureS',
+  },
+  {
+    type: 'error',
+    inputs: [
+      { name: 'spender', internalType: 'address', type: 'address' },
+      { name: 'allowance', internalType: 'uint256', type: 'uint256' },
+      { name: 'needed', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'ERC20InsufficientAllowance',
+  },
+  {
+    type: 'error',
+    inputs: [
+      { name: 'sender', internalType: 'address', type: 'address' },
+      { name: 'balance', internalType: 'uint256', type: 'uint256' },
+      { name: 'needed', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'ERC20InsufficientBalance',
+  },
+  {
+    type: 'error',
+    inputs: [{ name: 'approver', internalType: 'address', type: 'address' }],
+    name: 'ERC20InvalidApprover',
+  },
+  {
+    type: 'error',
+    inputs: [{ name: 'receiver', internalType: 'address', type: 'address' }],
+    name: 'ERC20InvalidReceiver',
+  },
+  {
+    type: 'error',
+    inputs: [{ name: 'sender', internalType: 'address', type: 'address' }],
+    name: 'ERC20InvalidSender',
+  },
+  {
+    type: 'error',
+    inputs: [{ name: 'spender', internalType: 'address', type: 'address' }],
+    name: 'ERC20InvalidSpender',
+  },
+  {
+    type: 'error',
+    inputs: [{ name: 'deadline', internalType: 'uint256', type: 'uint256' }],
+    name: 'ERC2612ExpiredSignature',
+  },
+  {
+    type: 'error',
+    inputs: [
+      { name: 'signer', internalType: 'address', type: 'address' },
+      { name: 'owner', internalType: 'address', type: 'address' },
+    ],
+    name: 'ERC2612InvalidSigner',
+  },
+  {
+    type: 'error',
+    inputs: [
+      { name: 'account', internalType: 'address', type: 'address' },
+      { name: 'currentNonce', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'InvalidAccountNonce',
+  },
+  { type: 'error', inputs: [], name: 'InvalidShortString' },
+  {
+    type: 'error',
+    inputs: [{ name: 'str', internalType: 'string', type: 'string' }],
+    name: 'StringTooLong',
+  },
+] as const
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // ICFToken
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 export const icfTokenAbi = [
+  {
+    type: 'function',
+    inputs: [],
+    name: 'DOMAIN_SEPARATOR',
+    outputs: [{ name: '', internalType: 'bytes32', type: 'bytes32' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'owner', internalType: 'address', type: 'address' }],
+    name: 'nonces',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'owner', internalType: 'address', type: 'address' },
+      { name: 'spender', internalType: 'address', type: 'address' },
+      { name: 'value', internalType: 'uint256', type: 'uint256' },
+      { name: 'deadline', internalType: 'uint256', type: 'uint256' },
+      { name: 'v', internalType: 'uint8', type: 'uint8' },
+      { name: 'r', internalType: 'bytes32', type: 'bytes32' },
+      { name: 's', internalType: 'bytes32', type: 'bytes32' },
+    ],
+    name: 'permit',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
   {
     type: 'function',
     inputs: [
@@ -846,6 +1458,65 @@ export const ierc20MetadataAbi = [
     ],
     name: 'Transfer',
   },
+] as const
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// IERC20Permit
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+export const ierc20PermitAbi = [
+  {
+    type: 'function',
+    inputs: [],
+    name: 'DOMAIN_SEPARATOR',
+    outputs: [{ name: '', internalType: 'bytes32', type: 'bytes32' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'owner', internalType: 'address', type: 'address' }],
+    name: 'nonces',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'owner', internalType: 'address', type: 'address' },
+      { name: 'spender', internalType: 'address', type: 'address' },
+      { name: 'value', internalType: 'uint256', type: 'uint256' },
+      { name: 'deadline', internalType: 'uint256', type: 'uint256' },
+      { name: 'v', internalType: 'uint8', type: 'uint8' },
+      { name: 'r', internalType: 'bytes32', type: 'bytes32' },
+      { name: 's', internalType: 'bytes32', type: 'bytes32' },
+    ],
+    name: 'permit',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+] as const
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// IERC5267
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+export const ierc5267Abi = [
+  {
+    type: 'function',
+    inputs: [],
+    name: 'eip712Domain',
+    outputs: [
+      { name: 'fields', internalType: 'bytes1', type: 'bytes1' },
+      { name: 'name', internalType: 'string', type: 'string' },
+      { name: 'version', internalType: 'string', type: 'string' },
+      { name: 'chainId', internalType: 'uint256', type: 'uint256' },
+      { name: 'verifyingContract', internalType: 'address', type: 'address' },
+      { name: 'salt', internalType: 'bytes32', type: 'bytes32' },
+      { name: 'extensions', internalType: 'uint256[]', type: 'uint256[]' },
+    ],
+    stateMutability: 'view',
+  },
+  { type: 'event', anonymous: false, inputs: [], name: 'EIP712DomainChanged' },
 ] as const
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1160,6 +1831,14 @@ export const iTokenAbi = [
     outputs: [],
     stateMutability: 'nonpayable',
   },
+] as const
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Math
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+export const mathAbi = [
+  { type: 'error', inputs: [], name: 'MathOverflowedMulDiv' },
 ] as const
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1687,6 +2366,28 @@ export const multiSigWalletAbi = [
 ] as const
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Nonces
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+export const noncesAbi = [
+  {
+    type: 'function',
+    inputs: [{ name: 'owner', internalType: 'address', type: 'address' }],
+    name: 'nonces',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'error',
+    inputs: [
+      { name: 'account', internalType: 'address', type: 'address' },
+      { name: 'currentNonce', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'InvalidAccountNonce',
+  },
+] as const
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Ownable
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -1744,6 +2445,34 @@ export const ownableAbi = [
 ] as const
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// ShortStrings
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+export const shortStringsAbi = [
+  { type: 'error', inputs: [], name: 'InvalidShortString' },
+  {
+    type: 'error',
+    inputs: [{ name: 'str', internalType: 'string', type: 'string' }],
+    name: 'StringTooLong',
+  },
+] as const
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Strings
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+export const stringsAbi = [
+  {
+    type: 'error',
+    inputs: [
+      { name: 'value', internalType: 'uint256', type: 'uint256' },
+      { name: 'length', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'StringsInsufficientHexLength',
+  },
+] as const
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // React
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -1753,6 +2482,15 @@ export const ownableAbi = [
 export const useReadCfToken = /*#__PURE__*/ createUseReadContract({
   abi: cfTokenAbi,
 })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link cfTokenAbi}__ and `functionName` set to `"DOMAIN_SEPARATOR"`
+ */
+export const useReadCfTokenDomainSeparator =
+  /*#__PURE__*/ createUseReadContract({
+    abi: cfTokenAbi,
+    functionName: 'DOMAIN_SEPARATOR',
+  })
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link cfTokenAbi}__ and `functionName` set to `"allowance"`
@@ -1779,11 +2517,27 @@ export const useReadCfTokenDecimals = /*#__PURE__*/ createUseReadContract({
 })
 
 /**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link cfTokenAbi}__ and `functionName` set to `"eip712Domain"`
+ */
+export const useReadCfTokenEip712Domain = /*#__PURE__*/ createUseReadContract({
+  abi: cfTokenAbi,
+  functionName: 'eip712Domain',
+})
+
+/**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link cfTokenAbi}__ and `functionName` set to `"name"`
  */
 export const useReadCfTokenName = /*#__PURE__*/ createUseReadContract({
   abi: cfTokenAbi,
   functionName: 'name',
+})
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link cfTokenAbi}__ and `functionName` set to `"nonces"`
+ */
+export const useReadCfTokenNonces = /*#__PURE__*/ createUseReadContract({
+  abi: cfTokenAbi,
+  functionName: 'nonces',
 })
 
 /**
@@ -1826,11 +2580,35 @@ export const useWriteCfTokenApprove = /*#__PURE__*/ createUseWriteContract({
 })
 
 /**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link cfTokenAbi}__ and `functionName` set to `"burn"`
+ */
+export const useWriteCfTokenBurn = /*#__PURE__*/ createUseWriteContract({
+  abi: cfTokenAbi,
+  functionName: 'burn',
+})
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link cfTokenAbi}__ and `functionName` set to `"burnFrom"`
+ */
+export const useWriteCfTokenBurnFrom = /*#__PURE__*/ createUseWriteContract({
+  abi: cfTokenAbi,
+  functionName: 'burnFrom',
+})
+
+/**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link cfTokenAbi}__ and `functionName` set to `"mint"`
  */
 export const useWriteCfTokenMint = /*#__PURE__*/ createUseWriteContract({
   abi: cfTokenAbi,
   functionName: 'mint',
+})
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link cfTokenAbi}__ and `functionName` set to `"permit"`
+ */
+export const useWriteCfTokenPermit = /*#__PURE__*/ createUseWriteContract({
+  abi: cfTokenAbi,
+  functionName: 'permit',
 })
 
 /**
@@ -1883,12 +2661,36 @@ export const useSimulateCfTokenApprove =
   })
 
 /**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link cfTokenAbi}__ and `functionName` set to `"burn"`
+ */
+export const useSimulateCfTokenBurn = /*#__PURE__*/ createUseSimulateContract({
+  abi: cfTokenAbi,
+  functionName: 'burn',
+})
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link cfTokenAbi}__ and `functionName` set to `"burnFrom"`
+ */
+export const useSimulateCfTokenBurnFrom =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: cfTokenAbi,
+    functionName: 'burnFrom',
+  })
+
+/**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link cfTokenAbi}__ and `functionName` set to `"mint"`
  */
 export const useSimulateCfTokenMint = /*#__PURE__*/ createUseSimulateContract({
   abi: cfTokenAbi,
   functionName: 'mint',
 })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link cfTokenAbi}__ and `functionName` set to `"permit"`
+ */
+export const useSimulateCfTokenPermit = /*#__PURE__*/ createUseSimulateContract(
+  { abi: cfTokenAbi, functionName: 'permit' },
+)
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link cfTokenAbi}__ and `functionName` set to `"renounceOwnership"`
@@ -1940,6 +2742,15 @@ export const useWatchCfTokenApprovalEvent =
   /*#__PURE__*/ createUseWatchContractEvent({
     abi: cfTokenAbi,
     eventName: 'Approval',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link cfTokenAbi}__ and `eventName` set to `"EIP712DomainChanged"`
+ */
+export const useWatchCfTokenEip712DomainChangedEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: cfTokenAbi,
+    eventName: 'EIP712DomainChanged',
   })
 
 /**
@@ -2032,6 +2843,15 @@ export const useWriteCrowdFundLaunch = /*#__PURE__*/ createUseWriteContract({
 })
 
 /**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link crowdFundAbi}__ and `functionName` set to `"permitPledge"`
+ */
+export const useWriteCrowdFundPermitPledge =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: crowdFundAbi,
+    functionName: 'permitPledge',
+  })
+
+/**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link crowdFundAbi}__ and `functionName` set to `"pledge"`
  */
 export const useWriteCrowdFundPledge = /*#__PURE__*/ createUseWriteContract({
@@ -2087,6 +2907,15 @@ export const useSimulateCrowdFundLaunch =
   /*#__PURE__*/ createUseSimulateContract({
     abi: crowdFundAbi,
     functionName: 'launch',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link crowdFundAbi}__ and `functionName` set to `"permitPledge"`
+ */
+export const useSimulateCrowdFundPermitPledge =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: crowdFundAbi,
+    functionName: 'permitPledge',
   })
 
 /**
@@ -2175,6 +3004,37 @@ export const useWatchCrowdFundUnpledgeEvent =
   /*#__PURE__*/ createUseWatchContractEvent({
     abi: crowdFundAbi,
     eventName: 'Unpledge',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link eip712Abi}__
+ */
+export const useReadEip712 = /*#__PURE__*/ createUseReadContract({
+  abi: eip712Abi,
+})
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link eip712Abi}__ and `functionName` set to `"eip712Domain"`
+ */
+export const useReadEip712Eip712Domain = /*#__PURE__*/ createUseReadContract({
+  abi: eip712Abi,
+  functionName: 'eip712Domain',
+})
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link eip712Abi}__
+ */
+export const useWatchEip712Event = /*#__PURE__*/ createUseWatchContractEvent({
+  abi: eip712Abi,
+})
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link eip712Abi}__ and `eventName` set to `"EIP712DomainChanged"`
+ */
+export const useWatchEip712Eip712DomainChangedEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: eip712Abi,
+    eventName: 'EIP712DomainChanged',
   })
 
 /**
@@ -2320,10 +3180,423 @@ export const useWatchErc20TransferEvent =
   })
 
 /**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link erc20BurnableAbi}__
+ */
+export const useReadErc20Burnable = /*#__PURE__*/ createUseReadContract({
+  abi: erc20BurnableAbi,
+})
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link erc20BurnableAbi}__ and `functionName` set to `"allowance"`
+ */
+export const useReadErc20BurnableAllowance =
+  /*#__PURE__*/ createUseReadContract({
+    abi: erc20BurnableAbi,
+    functionName: 'allowance',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link erc20BurnableAbi}__ and `functionName` set to `"balanceOf"`
+ */
+export const useReadErc20BurnableBalanceOf =
+  /*#__PURE__*/ createUseReadContract({
+    abi: erc20BurnableAbi,
+    functionName: 'balanceOf',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link erc20BurnableAbi}__ and `functionName` set to `"decimals"`
+ */
+export const useReadErc20BurnableDecimals = /*#__PURE__*/ createUseReadContract(
+  { abi: erc20BurnableAbi, functionName: 'decimals' },
+)
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link erc20BurnableAbi}__ and `functionName` set to `"name"`
+ */
+export const useReadErc20BurnableName = /*#__PURE__*/ createUseReadContract({
+  abi: erc20BurnableAbi,
+  functionName: 'name',
+})
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link erc20BurnableAbi}__ and `functionName` set to `"symbol"`
+ */
+export const useReadErc20BurnableSymbol = /*#__PURE__*/ createUseReadContract({
+  abi: erc20BurnableAbi,
+  functionName: 'symbol',
+})
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link erc20BurnableAbi}__ and `functionName` set to `"totalSupply"`
+ */
+export const useReadErc20BurnableTotalSupply =
+  /*#__PURE__*/ createUseReadContract({
+    abi: erc20BurnableAbi,
+    functionName: 'totalSupply',
+  })
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link erc20BurnableAbi}__
+ */
+export const useWriteErc20Burnable = /*#__PURE__*/ createUseWriteContract({
+  abi: erc20BurnableAbi,
+})
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link erc20BurnableAbi}__ and `functionName` set to `"approve"`
+ */
+export const useWriteErc20BurnableApprove =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: erc20BurnableAbi,
+    functionName: 'approve',
+  })
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link erc20BurnableAbi}__ and `functionName` set to `"burn"`
+ */
+export const useWriteErc20BurnableBurn = /*#__PURE__*/ createUseWriteContract({
+  abi: erc20BurnableAbi,
+  functionName: 'burn',
+})
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link erc20BurnableAbi}__ and `functionName` set to `"burnFrom"`
+ */
+export const useWriteErc20BurnableBurnFrom =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: erc20BurnableAbi,
+    functionName: 'burnFrom',
+  })
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link erc20BurnableAbi}__ and `functionName` set to `"transfer"`
+ */
+export const useWriteErc20BurnableTransfer =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: erc20BurnableAbi,
+    functionName: 'transfer',
+  })
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link erc20BurnableAbi}__ and `functionName` set to `"transferFrom"`
+ */
+export const useWriteErc20BurnableTransferFrom =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: erc20BurnableAbi,
+    functionName: 'transferFrom',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link erc20BurnableAbi}__
+ */
+export const useSimulateErc20Burnable = /*#__PURE__*/ createUseSimulateContract(
+  { abi: erc20BurnableAbi },
+)
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link erc20BurnableAbi}__ and `functionName` set to `"approve"`
+ */
+export const useSimulateErc20BurnableApprove =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: erc20BurnableAbi,
+    functionName: 'approve',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link erc20BurnableAbi}__ and `functionName` set to `"burn"`
+ */
+export const useSimulateErc20BurnableBurn =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: erc20BurnableAbi,
+    functionName: 'burn',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link erc20BurnableAbi}__ and `functionName` set to `"burnFrom"`
+ */
+export const useSimulateErc20BurnableBurnFrom =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: erc20BurnableAbi,
+    functionName: 'burnFrom',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link erc20BurnableAbi}__ and `functionName` set to `"transfer"`
+ */
+export const useSimulateErc20BurnableTransfer =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: erc20BurnableAbi,
+    functionName: 'transfer',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link erc20BurnableAbi}__ and `functionName` set to `"transferFrom"`
+ */
+export const useSimulateErc20BurnableTransferFrom =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: erc20BurnableAbi,
+    functionName: 'transferFrom',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link erc20BurnableAbi}__
+ */
+export const useWatchErc20BurnableEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({ abi: erc20BurnableAbi })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link erc20BurnableAbi}__ and `eventName` set to `"Approval"`
+ */
+export const useWatchErc20BurnableApprovalEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: erc20BurnableAbi,
+    eventName: 'Approval',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link erc20BurnableAbi}__ and `eventName` set to `"Transfer"`
+ */
+export const useWatchErc20BurnableTransferEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: erc20BurnableAbi,
+    eventName: 'Transfer',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link erc20PermitAbi}__
+ */
+export const useReadErc20Permit = /*#__PURE__*/ createUseReadContract({
+  abi: erc20PermitAbi,
+})
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link erc20PermitAbi}__ and `functionName` set to `"DOMAIN_SEPARATOR"`
+ */
+export const useReadErc20PermitDomainSeparator =
+  /*#__PURE__*/ createUseReadContract({
+    abi: erc20PermitAbi,
+    functionName: 'DOMAIN_SEPARATOR',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link erc20PermitAbi}__ and `functionName` set to `"allowance"`
+ */
+export const useReadErc20PermitAllowance = /*#__PURE__*/ createUseReadContract({
+  abi: erc20PermitAbi,
+  functionName: 'allowance',
+})
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link erc20PermitAbi}__ and `functionName` set to `"balanceOf"`
+ */
+export const useReadErc20PermitBalanceOf = /*#__PURE__*/ createUseReadContract({
+  abi: erc20PermitAbi,
+  functionName: 'balanceOf',
+})
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link erc20PermitAbi}__ and `functionName` set to `"decimals"`
+ */
+export const useReadErc20PermitDecimals = /*#__PURE__*/ createUseReadContract({
+  abi: erc20PermitAbi,
+  functionName: 'decimals',
+})
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link erc20PermitAbi}__ and `functionName` set to `"eip712Domain"`
+ */
+export const useReadErc20PermitEip712Domain =
+  /*#__PURE__*/ createUseReadContract({
+    abi: erc20PermitAbi,
+    functionName: 'eip712Domain',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link erc20PermitAbi}__ and `functionName` set to `"name"`
+ */
+export const useReadErc20PermitName = /*#__PURE__*/ createUseReadContract({
+  abi: erc20PermitAbi,
+  functionName: 'name',
+})
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link erc20PermitAbi}__ and `functionName` set to `"nonces"`
+ */
+export const useReadErc20PermitNonces = /*#__PURE__*/ createUseReadContract({
+  abi: erc20PermitAbi,
+  functionName: 'nonces',
+})
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link erc20PermitAbi}__ and `functionName` set to `"symbol"`
+ */
+export const useReadErc20PermitSymbol = /*#__PURE__*/ createUseReadContract({
+  abi: erc20PermitAbi,
+  functionName: 'symbol',
+})
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link erc20PermitAbi}__ and `functionName` set to `"totalSupply"`
+ */
+export const useReadErc20PermitTotalSupply =
+  /*#__PURE__*/ createUseReadContract({
+    abi: erc20PermitAbi,
+    functionName: 'totalSupply',
+  })
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link erc20PermitAbi}__
+ */
+export const useWriteErc20Permit = /*#__PURE__*/ createUseWriteContract({
+  abi: erc20PermitAbi,
+})
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link erc20PermitAbi}__ and `functionName` set to `"approve"`
+ */
+export const useWriteErc20PermitApprove = /*#__PURE__*/ createUseWriteContract({
+  abi: erc20PermitAbi,
+  functionName: 'approve',
+})
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link erc20PermitAbi}__ and `functionName` set to `"permit"`
+ */
+export const useWriteErc20PermitPermit = /*#__PURE__*/ createUseWriteContract({
+  abi: erc20PermitAbi,
+  functionName: 'permit',
+})
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link erc20PermitAbi}__ and `functionName` set to `"transfer"`
+ */
+export const useWriteErc20PermitTransfer = /*#__PURE__*/ createUseWriteContract(
+  { abi: erc20PermitAbi, functionName: 'transfer' },
+)
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link erc20PermitAbi}__ and `functionName` set to `"transferFrom"`
+ */
+export const useWriteErc20PermitTransferFrom =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: erc20PermitAbi,
+    functionName: 'transferFrom',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link erc20PermitAbi}__
+ */
+export const useSimulateErc20Permit = /*#__PURE__*/ createUseSimulateContract({
+  abi: erc20PermitAbi,
+})
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link erc20PermitAbi}__ and `functionName` set to `"approve"`
+ */
+export const useSimulateErc20PermitApprove =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: erc20PermitAbi,
+    functionName: 'approve',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link erc20PermitAbi}__ and `functionName` set to `"permit"`
+ */
+export const useSimulateErc20PermitPermit =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: erc20PermitAbi,
+    functionName: 'permit',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link erc20PermitAbi}__ and `functionName` set to `"transfer"`
+ */
+export const useSimulateErc20PermitTransfer =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: erc20PermitAbi,
+    functionName: 'transfer',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link erc20PermitAbi}__ and `functionName` set to `"transferFrom"`
+ */
+export const useSimulateErc20PermitTransferFrom =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: erc20PermitAbi,
+    functionName: 'transferFrom',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link erc20PermitAbi}__
+ */
+export const useWatchErc20PermitEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({ abi: erc20PermitAbi })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link erc20PermitAbi}__ and `eventName` set to `"Approval"`
+ */
+export const useWatchErc20PermitApprovalEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: erc20PermitAbi,
+    eventName: 'Approval',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link erc20PermitAbi}__ and `eventName` set to `"EIP712DomainChanged"`
+ */
+export const useWatchErc20PermitEip712DomainChangedEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: erc20PermitAbi,
+    eventName: 'EIP712DomainChanged',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link erc20PermitAbi}__ and `eventName` set to `"Transfer"`
+ */
+export const useWatchErc20PermitTransferEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: erc20PermitAbi,
+    eventName: 'Transfer',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link icfTokenAbi}__
+ */
+export const useReadIcfToken = /*#__PURE__*/ createUseReadContract({
+  abi: icfTokenAbi,
+})
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link icfTokenAbi}__ and `functionName` set to `"DOMAIN_SEPARATOR"`
+ */
+export const useReadIcfTokenDomainSeparator =
+  /*#__PURE__*/ createUseReadContract({
+    abi: icfTokenAbi,
+    functionName: 'DOMAIN_SEPARATOR',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link icfTokenAbi}__ and `functionName` set to `"nonces"`
+ */
+export const useReadIcfTokenNonces = /*#__PURE__*/ createUseReadContract({
+  abi: icfTokenAbi,
+  functionName: 'nonces',
+})
+
+/**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link icfTokenAbi}__
  */
 export const useWriteIcfToken = /*#__PURE__*/ createUseWriteContract({
   abi: icfTokenAbi,
+})
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link icfTokenAbi}__ and `functionName` set to `"permit"`
+ */
+export const useWriteIcfTokenPermit = /*#__PURE__*/ createUseWriteContract({
+  abi: icfTokenAbi,
+  functionName: 'permit',
 })
 
 /**
@@ -2349,6 +3622,15 @@ export const useWriteIcfTokenTransferFrom =
 export const useSimulateIcfToken = /*#__PURE__*/ createUseSimulateContract({
   abi: icfTokenAbi,
 })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link icfTokenAbi}__ and `functionName` set to `"permit"`
+ */
+export const useSimulateIcfTokenPermit =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: icfTokenAbi,
+    functionName: 'permit',
+  })
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link icfTokenAbi}__ and `functionName` set to `"transfer"`
@@ -2516,6 +3798,92 @@ export const useWatchIerc20MetadataTransferEvent =
   /*#__PURE__*/ createUseWatchContractEvent({
     abi: ierc20MetadataAbi,
     eventName: 'Transfer',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link ierc20PermitAbi}__
+ */
+export const useReadIerc20Permit = /*#__PURE__*/ createUseReadContract({
+  abi: ierc20PermitAbi,
+})
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link ierc20PermitAbi}__ and `functionName` set to `"DOMAIN_SEPARATOR"`
+ */
+export const useReadIerc20PermitDomainSeparator =
+  /*#__PURE__*/ createUseReadContract({
+    abi: ierc20PermitAbi,
+    functionName: 'DOMAIN_SEPARATOR',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link ierc20PermitAbi}__ and `functionName` set to `"nonces"`
+ */
+export const useReadIerc20PermitNonces = /*#__PURE__*/ createUseReadContract({
+  abi: ierc20PermitAbi,
+  functionName: 'nonces',
+})
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link ierc20PermitAbi}__
+ */
+export const useWriteIerc20Permit = /*#__PURE__*/ createUseWriteContract({
+  abi: ierc20PermitAbi,
+})
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link ierc20PermitAbi}__ and `functionName` set to `"permit"`
+ */
+export const useWriteIerc20PermitPermit = /*#__PURE__*/ createUseWriteContract({
+  abi: ierc20PermitAbi,
+  functionName: 'permit',
+})
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link ierc20PermitAbi}__
+ */
+export const useSimulateIerc20Permit = /*#__PURE__*/ createUseSimulateContract({
+  abi: ierc20PermitAbi,
+})
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link ierc20PermitAbi}__ and `functionName` set to `"permit"`
+ */
+export const useSimulateIerc20PermitPermit =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: ierc20PermitAbi,
+    functionName: 'permit',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link ierc5267Abi}__
+ */
+export const useReadIerc5267 = /*#__PURE__*/ createUseReadContract({
+  abi: ierc5267Abi,
+})
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link ierc5267Abi}__ and `functionName` set to `"eip712Domain"`
+ */
+export const useReadIerc5267Eip712Domain = /*#__PURE__*/ createUseReadContract({
+  abi: ierc5267Abi,
+  functionName: 'eip712Domain',
+})
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link ierc5267Abi}__
+ */
+export const useWatchIerc5267Event = /*#__PURE__*/ createUseWatchContractEvent({
+  abi: ierc5267Abi,
+})
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link ierc5267Abi}__ and `eventName` set to `"EIP712DomainChanged"`
+ */
+export const useWatchIerc5267Eip712DomainChangedEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: ierc5267Abi,
+    eventName: 'EIP712DomainChanged',
   })
 
 /**
@@ -3275,6 +4643,21 @@ export const useWatchMultiSigWalletTransactionSubmittedEvent =
     abi: multiSigWalletAbi,
     eventName: 'TransactionSubmitted',
   })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link noncesAbi}__
+ */
+export const useReadNonces = /*#__PURE__*/ createUseReadContract({
+  abi: noncesAbi,
+})
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link noncesAbi}__ and `functionName` set to `"nonces"`
+ */
+export const useReadNoncesNonces = /*#__PURE__*/ createUseReadContract({
+  abi: noncesAbi,
+  functionName: 'nonces',
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link ownableAbi}__

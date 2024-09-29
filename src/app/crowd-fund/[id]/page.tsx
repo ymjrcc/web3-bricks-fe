@@ -4,14 +4,14 @@ import {
   Breadcrumbs, BreadcrumbItem, Card, CardHeader, CardBody, Divider, Progress, Button, Code, Input, Chip,
   Table, TableHeader, TableColumn, TableBody, TableRow, TableCell,
 } from "@nextui-org/react";
-import { useWriteCrowdFund, useReadCrowdFund, crowdFundAbi } from "@/utils/contracts";
+import { useWriteCrowdFund, useReadCrowdFund, crowdFundAbi, useReadCfToken } from "@/utils/contracts";
 import { useEffect, useMemo, useState } from "react";
-import { formatUnits, parseAbiItem, parseEther } from "viem";
-import { useAccount, usePublicClient, useWaitForTransactionReceipt, useBlock } from "wagmi";
+import { formatUnits, parseAbiItem, parseEther, parseSignature } from "viem";
+import { useAccount, usePublicClient, useWaitForTransactionReceipt, useBlock, useChainId, useSignTypedData } from "wagmi";
 import toast from "react-hot-toast";
 
-const contractAddress = '0x0165878a594ca255338adfa4d48449f69242eb8f' as const
-const erc20Address = '0x5FC8d32690cc91D4c39d9d3abcBD16989F875707' as const
+const contractAddress = '0xE2a72525Dc19E416382F142b8d4650cFa102838E' as const
+const erc20Address = '0x4A6490eb1d5ebFE42AAe0bea56d9Ba4e67A3d4d0' as const
 
 function formatTimestamp(timestamp: number): string {
   const date = new Date(timestamp * 1000); // 将秒转换为毫秒
@@ -29,7 +29,9 @@ function formatTimestamp(timestamp: number): string {
 const Page = ({ params }: { params: { id: string } }) => {
 
   const publicClient = usePublicClient()
-  const { address} = useAccount()
+  const { address }: any = useAccount()
+  const chainId = useChainId()
+  const { signTypedDataAsync } = useSignTypedData();
   const { data: blockInfo } = useBlock()
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const { data: hash, writeContractAsync: writeCrowdFund, isPending } = useWriteCrowdFund()
@@ -38,7 +40,11 @@ const Page = ({ params }: { params: { id: string } }) => {
   const [logs, setLogs] = useState<any[]>([])
   const [pledgeAmount, setPledgeAmount] = useState<string>('')
 
-  console.log(new Date(Number(blockInfo?.timestamp) * 1000));
+  const { data: nonce, refetch: refetchNonce } = useReadCfToken({ 
+    address: erc20Address,
+    functionName: 'nonces',
+    args: [address]
+  })
 
   const { data: campaign, refetch: refetchCampaign } = useReadCrowdFund({
     address: contractAddress,
@@ -46,12 +52,57 @@ const Page = ({ params }: { params: { id: string } }) => {
     args: [BigInt(params.id)]
   })
 
+  const signToPermit = async () => {
+    await refetchNonce()
+    const domain = {
+      name: 'CFToken',
+      version: '1',
+      chainId: chainId,
+      verifyingContract: erc20Address
+    }
+    const types = {
+      Permit: [
+        { name: 'owner', type: 'address' },
+        { name: 'spender', type: 'address' },
+        { name: 'value', type: 'uint256' },
+        { name: 'nonce', type: 'uint256' },
+        { name: 'deadline', type: 'uint256' }
+      ]
+    }
+    const value = parseEther(pledgeAmount)
+    const deadline = BigInt(Math.floor(Date.now() / 1000) + 60 * 20)
+    const message = {
+      owner: address,
+      spender: contractAddress,
+      value: value,
+      nonce: nonce,
+      deadline: deadline
+    }
+    const signHash = await signTypedDataAsync({
+      primaryType: 'Permit',
+      domain,
+      types,
+      message
+    })
+    const signatureData = parseSignature(signHash)
+    return {
+      ...signatureData,
+      deadline
+    }
+  }
+
   const onPledge = async () => {
+    const result: any = await signToPermit()
     setCurrentAction('pledge')
     await writeCrowdFund({
       address: contractAddress,
-      functionName: 'pledge',
-      args: [BigInt(params.id), parseEther(pledgeAmount)]
+      functionName: 'permitPledge',
+      args: [
+        BigInt(params.id), 
+        parseEther(pledgeAmount),
+        result.deadline,
+        result.v, result.r, result.s
+      ]
     },{
       onSuccess: () => {
         toast.success('Pledged successfully')
@@ -136,9 +187,11 @@ const Page = ({ params }: { params: { id: string } }) => {
       args: {
         id: BigInt(params.id)
       },
-      fromBlock: BigInt(0),
+      fromBlock: BigInt(6780435),
       toBlock: 'latest'
     })
+    console.log(_logs);
+    
     setLogs(_logs)
   }
 
@@ -149,6 +202,7 @@ const Page = ({ params }: { params: { id: string } }) => {
   useEffect(() => {
     if(isSuccess) {
       refetchCampaign()
+      refetchNonce()
     }
   }, [isSuccess])
 
@@ -157,8 +211,6 @@ const Page = ({ params }: { params: { id: string } }) => {
     const startTime = Number(campaign[3])
     const endTime = Number(campaign[4])
     const now = Date.now() / 1000
-    console.log(startTime, endTime, now);
-    
     return now >= startTime && now <= endTime
   }, [campaign])
 
@@ -257,7 +309,11 @@ const Page = ({ params }: { params: { id: string } }) => {
           </CardHeader>
           <Divider />
           <CardBody>
-            <div>{campaign?.[5] ? 'Claimed' : 'Not Claimed'}</div>
+            <div>{
+              campaign?.[5] ? 
+                <Chip className="bg-green-100">Claimed</Chip> : 
+                <Chip className="bg-gray-100">Not Claimed</Chip>
+            }</div>
           </CardBody>
         </Card>
         
@@ -267,7 +323,7 @@ const Page = ({ params }: { params: { id: string } }) => {
       <Table aria-label="Pledge records table">
         <TableHeader>
           <TableColumn>Pledger Address</TableColumn>
-          <TableColumn>Pledged Time</TableColumn>
+          {/* <TableColumn>Pledged Time</TableColumn> */}
           <TableColumn>Amount (CWT)</TableColumn>
           {/* <TableColumn>Action</TableColumn> */}
         </TableHeader>
@@ -277,7 +333,7 @@ const Page = ({ params }: { params: { id: string } }) => {
               <TableCell>
                 <Code>{log.args.caller}</Code>
               </TableCell>
-              <TableCell>{formatTimestamp(parseInt(log.blockTimestamp.slice(2),16))}</TableCell>
+              {/* <TableCell>{formatTimestamp(parseInt(log.blockTimestamp.slice(2),16))}</TableCell> */}
               <TableCell>{formatUnits(log.args.amount, 18)}</TableCell>
               {/* <TableCell>
                 {
