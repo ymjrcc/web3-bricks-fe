@@ -1,12 +1,13 @@
 'use client'
 import { 
-  Breadcrumbs, BreadcrumbItem, Card, CardHeader, CardBody, Divider, Progress, Button, Code,
+  Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure,
+  Breadcrumbs, BreadcrumbItem, Card, CardHeader, CardBody, Divider, Progress, Button, Code, Input, Chip,
   Table, TableHeader, TableColumn, TableBody, TableRow, TableCell,
 } from "@nextui-org/react";
 import { useWriteCrowdFund, useReadCrowdFund, crowdFundAbi } from "@/utils/contracts";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { formatUnits, parseAbiItem, parseEther } from "viem";
-import { useAccount, usePublicClient, useWaitForTransactionReceipt } from "wagmi";
+import { useAccount, usePublicClient, useWaitForTransactionReceipt, useBlock } from "wagmi";
 import toast from "react-hot-toast";
 
 const contractAddress = '0x0165878a594ca255338adfa4d48449f69242eb8f' as const
@@ -27,12 +28,17 @@ function formatTimestamp(timestamp: number): string {
 
 const Page = ({ params }: { params: { id: string } }) => {
 
+  const publicClient = usePublicClient()
   const { address} = useAccount()
+  const { data: blockInfo } = useBlock()
+  const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const { data: hash, writeContractAsync: writeCrowdFund, isPending } = useWriteCrowdFund()
   const { isLoading, isSuccess } = useWaitForTransactionReceipt({ hash });
   const [currentAction, setCurrentAction] = useState<'pledge' | 'claim' | 'refund' | 'unpledge'>('pledge')
   const [logs, setLogs] = useState<any[]>([])
-  const publicClient = usePublicClient()
+  const [pledgeAmount, setPledgeAmount] = useState<string>('')
+
+  console.log(new Date(Number(blockInfo?.timestamp) * 1000));
 
   const { data: campaign, refetch: refetchCampaign } = useReadCrowdFund({
     address: contractAddress,
@@ -45,10 +51,12 @@ const Page = ({ params }: { params: { id: string } }) => {
     await writeCrowdFund({
       address: contractAddress,
       functionName: 'pledge',
-      args: [BigInt(params.id), parseEther('1')]
+      args: [BigInt(params.id), parseEther(pledgeAmount)]
     },{
       onSuccess: () => {
         toast.success('Pledged successfully')
+        setPledgeAmount('')
+        onClose()
       },
       onError: (error) => {
         toast.error(error.message, {
@@ -132,7 +140,6 @@ const Page = ({ params }: { params: { id: string } }) => {
       toBlock: 'latest'
     })
     setLogs(_logs)
-    console.log(_logs);
   }
 
   useEffect(() => {
@@ -144,6 +151,16 @@ const Page = ({ params }: { params: { id: string } }) => {
       refetchCampaign()
     }
   }, [isSuccess])
+
+  const isOnDuration = useMemo(() => {
+    if(!campaign) return false
+    const startTime = Number(campaign[3])
+    const endTime = Number(campaign[4])
+    const now = Date.now() / 1000
+    console.log(startTime, endTime, now);
+    
+    return now >= startTime && now <= endTime
+  }, [campaign])
 
   return (
     <>
@@ -164,7 +181,8 @@ const Page = ({ params }: { params: { id: string } }) => {
         </Card>
         <Card className="flex-[3]">
           <CardHeader>
-            <div className="text-xl text-orange-400">Duration Time</div>
+            <div className="text-xl text-orange-400 mr-4">Duration Time</div>
+            <TimeStatus start={Number(campaign?.[3])} end={Number(campaign?.[4])} />
           </CardHeader>
           <Divider />
           <CardBody>
@@ -180,7 +198,8 @@ const Page = ({ params }: { params: { id: string } }) => {
             <div className="text-xl text-orange-400">Pledged Amount</div>
             <Button 
               color="primary" variant="flat" size="sm" 
-              onClick={onPledge}
+              onClick={onOpen}
+              isDisabled={!isOnDuration}
               isLoading={(isPending || isLoading) && currentAction === 'pledge'}
             >Pledge</Button>
           </CardHeader>
@@ -206,11 +225,13 @@ const Page = ({ params }: { params: { id: string } }) => {
                 color="success" variant="flat" className="mr-2" size="sm"
                 onClick={onClaim}
                 isLoading={(isPending || isLoading) && currentAction === 'claim'}
+                isDisabled={isOnDuration || campaign?.[5] === true}
               >Claim</Button>
               <Button 
                 color="default" variant="flat" size="sm"
                 onClick={onRefund}
                 isLoading={(isPending || isLoading) && currentAction === 'refund'}
+                isDisabled={isOnDuration || campaign?.[5] === true}
               >Refund</Button>
             </div>
           </CardHeader>
@@ -242,11 +263,11 @@ const Page = ({ params }: { params: { id: string } }) => {
         
       </div>
 
-      <div className='text-xl font-bold  text-gray-400 mb-2 mt-6'>Pledge Records:</div>
+      <div className='text-xl font-bold  text-gray-400 mb-2 mt-6'>Pledged Records:</div>
       <Table aria-label="Pledge records table">
         <TableHeader>
           <TableColumn>Pledger Address</TableColumn>
-          <TableColumn>Pledge Time</TableColumn>
+          <TableColumn>Pledged Time</TableColumn>
           <TableColumn>Amount (CWT)</TableColumn>
           {/* <TableColumn>Action</TableColumn> */}
         </TableHeader>
@@ -274,8 +295,60 @@ const Page = ({ params }: { params: { id: string } }) => {
         </TableBody>
       </Table>
 
+      <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader className="flex flex-col gap-1">Pledge</ModalHeader>
+              <ModalBody>
+                <Input 
+                  type="number" variant="bordered" label="Pledge Amount (CWT)" 
+                  value={pledgeAmount}
+                  onChange={(e) => setPledgeAmount(e.target.value)}
+                />
+              </ModalBody>
+              <ModalFooter>
+                <Button color="danger" variant="light" onPress={onClose}>
+                  Close
+                </Button>
+                <Button 
+                  color="primary" onPress={onPledge}
+                  isLoading={isPending || isLoading}
+                >
+                  Submit
+                </Button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
+
     </>
   )
 }
 
 export default Page
+
+const TimeStatus = ({ start, end }: { start: number; end: number }) => {
+  const [currentTime, setCurrentTime] = useState(Date.now() / 1000);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(Date.now() / 1000);
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
+
+  const status = useMemo(() => {
+    if (currentTime < start) {
+      return <Chip className="bg-gray-100">Not Started</Chip>;
+    } else if (currentTime >= start && currentTime <= end) {
+      return <Chip className="bg-green-100">In Progress</Chip>;
+    } else {
+      return <Chip className="bg-red-100">Ended</Chip>;
+    }
+  }, [currentTime, start, end]);
+
+  return status;
+};

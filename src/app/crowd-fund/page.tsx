@@ -5,11 +5,12 @@ import toast from "react-hot-toast";
 import {
   Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure,
   Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, 
-  Link, Button, Input, DatePicker, Code
+  Link, Button, Input, DatePicker, Code, Chip
  } from "@nextui-org/react";
  import { now, getLocalTimeZone } from "@internationalized/date";
  import { useReadContracts, useWaitForTransactionReceipt } from 'wagmi';
 import { useWriteCrowdFund, useReadCrowdFund, crowdFundAbi } from "@/utils/contracts";
+import clsx from "clsx";
 
 const contractAddress = '0x0165878a594ca255338adfa4d48449f69242eb8f' as const
 const erc20Address = '0x5FC8d32690cc91D4c39d9d3abcBD16989F875707' as const
@@ -26,6 +27,7 @@ const formatAddress = (address: string) => {
 }
 
 const Page = () => {
+  const [currentTime, setCurrentTime] = useState(Date.now())
   const [goal, setGoal] = useState('')
   const [rows, setRows] = useState<any[]>([])
   const [startTime, setStartTime] = useState(now(getLocalTimeZone()).add({hours: 1}))
@@ -62,12 +64,21 @@ const Page = () => {
   useEffect(() => {
     const _rows = campaigns?.map((campaign: any, index: number) => {
       if(campaign.status === 'success' && campaign.result) {
+        const startTime = Number(campaign.result[3]) * 1000
+        const endTime = Number(campaign.result[4]) * 1000
+        let status = 'Not Started'
+        if (currentTime >= startTime && currentTime < endTime) {
+          status = 'In Progress'
+        } else if (currentTime >= endTime) {
+          status = 'Ended'
+        }
         return {
           id: index + 1,
           creator: campaign.result[0],
           goal: formatUnits(campaign.result[1], 18),
           pledged: formatUnits(campaign.result[2], 18),
           claimed: campaign.result[5],
+          status
         }
       }
       return null
@@ -142,6 +153,7 @@ const Page = () => {
           <TableColumn>Creator</TableColumn>
           <TableColumn>Goal</TableColumn>
           <TableColumn>Pledged Amount</TableColumn>
+          <TableColumn>Status</TableColumn>
           <TableColumn>Claimed</TableColumn>
           <TableColumn>Action</TableColumn>
         </TableHeader>
@@ -153,7 +165,18 @@ const Page = () => {
                 <TableCell><Code>{formatAddress(row.creator)}</Code></TableCell>
                 <TableCell>{row.goal}</TableCell>
                 <TableCell>{row.pledged}</TableCell>
-                <TableCell>{row.claimed.toString()}</TableCell>
+                <TableCell>
+                  <Chip className={clsx(
+                    row.status === 'Not Started' && 'bg-gray-100',
+                    row.status === 'In Progress' && 'bg-green-100',
+                    row.status === 'Ended' && 'bg-red-100'
+                  )}>
+                    {row.status}
+                  </Chip>
+                </TableCell>
+                <TableCell>
+                  <span className={clsx(row.claimed && 'text-green-500 font-bold')}>{row.claimed? 'Yes' : 'No'}</span>
+                </TableCell>
                 <TableCell>
                   <Link href={`/crowd-fund/${row.id}`} className="text-orange-500" underline="hover">Detail</Link>
                 </TableCell>
