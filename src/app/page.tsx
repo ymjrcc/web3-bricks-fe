@@ -7,9 +7,9 @@ function Page() {
         {/* https://solidity-by-example.org/ */}
         <li className="line-through">Multi-Sig Wallet</li>
         <li className="line-through">Merkle Airdrop</li>
+        <li className="line-through">Crowd Fund</li>
         <li>English Auction</li>
         <li>Dutch Auction</li>
-        <li>Crowd Fund</li>
         <li>Staking Rewards</li>
         <li>Discrete Staking Rewards</li>
         <li>Chainlink Price Oracle</li>

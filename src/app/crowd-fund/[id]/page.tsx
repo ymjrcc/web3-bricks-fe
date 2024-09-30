@@ -39,6 +39,7 @@ const Page = ({ params }: { params: { id: string } }) => {
   const [currentAction, setCurrentAction] = useState<'pledge' | 'claim' | 'refund' | 'unpledge'>('pledge')
   const [logs, setLogs] = useState<any[]>([])
   const [pledgeAmount, setPledgeAmount] = useState<string>('')
+  const [isPledging, setIsPledging] = useState(false)
 
   const { data: nonce, refetch: refetchNonce } = useReadCfToken({ 
     address: erc20Address,
@@ -92,8 +93,9 @@ const Page = ({ params }: { params: { id: string } }) => {
   }
 
   const onPledge = async () => {
-    const result: any = await signToPermit()
     setCurrentAction('pledge')
+    setIsPledging(true)
+    const result: any = await signToPermit()
     await writeCrowdFund({
       address: contractAddress,
       functionName: 'permitPledge',
@@ -107,9 +109,11 @@ const Page = ({ params }: { params: { id: string } }) => {
       onSuccess: () => {
         toast.success('Pledged successfully')
         setPledgeAmount('')
+        setIsPledging(false)
         onClose()
       },
       onError: (error) => {
+        setIsPledging(false)
         toast.error(error.message, {
           style: {
             wordBreak: 'break-all'
@@ -272,20 +276,23 @@ const Page = ({ params }: { params: { id: string } }) => {
         <Card className="flex-[2]">
           <CardHeader className="flex justify-between">
             <div className="text-xl text-orange-400">Creator Address</div>
-            <div className="flex items-center">
-              <Button 
-                color="success" variant="flat" className="mr-2" size="sm"
-                onClick={onClaim}
-                isLoading={(isPending || isLoading) && currentAction === 'claim'}
-                isDisabled={isOnDuration || campaign?.[5] === true}
-              >Claim</Button>
-              <Button 
-                color="default" variant="flat" size="sm"
-                onClick={onRefund}
-                isLoading={(isPending || isLoading) && currentAction === 'refund'}
-                isDisabled={isOnDuration || campaign?.[5] === true}
-              >Refund</Button>
-            </div>
+            {
+              campaign?.[0] === address ?
+                <div className="flex items-center">
+                  <Button 
+                    color="success" variant="flat" className="mr-2" size="sm"
+                    onClick={onClaim}
+                    isLoading={(isPending || isLoading) && currentAction === 'claim'}
+                    isDisabled={isOnDuration || campaign?.[5] === true}
+                  >Claim</Button>
+                  <Button 
+                    color="default" variant="flat" size="sm"
+                    onClick={onRefund}
+                    isLoading={(isPending || isLoading) && currentAction === 'refund'}
+                    isDisabled={isOnDuration || campaign?.[5] === true}
+                  >Refund</Button>
+                </div> : null
+            }
           </CardHeader>
           <Divider />
           <CardBody>
@@ -369,7 +376,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                 </Button>
                 <Button 
                   color="primary" onPress={onPledge}
-                  isLoading={isPending || isLoading}
+                  isLoading={isPledging}
                 >
                   Submit
                 </Button>
