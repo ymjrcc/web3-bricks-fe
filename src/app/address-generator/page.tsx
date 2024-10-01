@@ -1,6 +1,7 @@
 'use client'
 import { useCallback, useState } from 'react'
 import { generatePrivateKey, privateKeyToAccount } from 'viem/accounts'
+import workerScript from './addressGeneratorWorker'
 
 function generateVanityAddress(suffix: string) {
   let attempts = 0;
@@ -54,6 +55,22 @@ function Page() {
     }, 0)
   }
 
+  const onTestClick = () => {
+    const worker = new Worker(workerScript);
+    console.log('开始搜索随机数...');
+    worker.postMessage({ target: '1234567' });
+    worker.onmessage = function(event) {
+        if (event.data.status === 'found') {
+            console.log(`找到匹配的数字: ${event.data.number}`);
+            console.log(`尝试次数: ${event.data.attempts}`);
+            worker.terminate(); // 终止 worker
+        } else if (event.data.status === 'progress') {
+            console.log(`已尝试 ${event.data.attempts} 次`);
+        }
+    };
+    console.log('主线程继续执行其他任务...');
+  }
+
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4">mnemonic</h1>
@@ -100,6 +117,7 @@ function Page() {
           <p>Private Key: {result.privateKey}</p>
         </div>
       )}
+      <div onClick={onTestClick}>test</div>
     </div>
   )
 }
