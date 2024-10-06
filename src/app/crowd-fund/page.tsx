@@ -183,7 +183,7 @@ const Page = () => {
               <div className="flex-1">
                 {
                   href
-                    ? <a href={href} target="_blank" className="text-blue-600 underline underline-offset-2">{value}</a>
+                    ? <a href={href} target="_blank" className="text-orange-600 underline underline-offset-2">{value}</a>
                     : value
                 }
               </div>

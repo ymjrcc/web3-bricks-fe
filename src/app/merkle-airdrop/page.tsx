@@ -141,7 +141,7 @@ const Page = () => {
               <div className="flex-1">
                 {
                   href
-                    ? <a href={href} target="_blank" className="text-blue-600 underline underline-offset-2">{value}</a>
+                    ? <a href={href} target="_blank" className="text-orange-600 underline underline-offset-2">{value}</a>
                     : value
                 }
               </div>
@@ -177,7 +177,7 @@ const Page = () => {
                 <TableCell>{claimeds?.[index].result?.toString()}</TableCell>
                 <TableCell>
                   <Button 
-                    size="sm" color="primary" variant="flat" 
+                    size="sm" color="warning" variant="flat" 
                     isDisabled={(to !== address) || claimeds?.[index].result}
                     isLoading={(to === address) && (isPending || isLoading)}
                     onClick={() => onClaim(to, amount)}
@@ -210,7 +210,7 @@ const Page = () => {
           onChange={(e) => setAmount(e.target.value)}
         />
         <Button 
-          color="primary"
+          color="primary" variant='flat'
           isDisabled={to.length !==42 || !amount}
           onClick={onVerify}
         >Verify</Button>

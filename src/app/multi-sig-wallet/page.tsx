@@ -187,7 +187,7 @@ const Page = () => {
               <div className="flex-1">
                 {
                   href
-                    ? <a href={href} target="_blank" className="text-blue-600 underline underline-offset-2">{value}</a>
+                    ? <a href={href} target="_blank" className="text-orange-600 underline underline-offset-2">{value}</a>
                     : value
                 }
               </div>
@@ -229,7 +229,7 @@ const Page = () => {
           />
 
           <Button
-            color="primary" variant="flat"
+            color="warning" variant="flat"
             isDisabled={!isOwner}
             isLoading={currentAction==='withdraw' && (isPending || isLoading)}
             onClick={onWithdraw}
@@ -239,7 +239,7 @@ const Page = () => {
 
         </div>
         <Button
-          color="primary" variant="flat" className="ml-4"
+          color="warning" variant="flat" className="ml-4"
           isDisabled={!isOwner}
           onClick={onOpen}
         >
@@ -270,7 +270,7 @@ const Page = () => {
                     <TableCell>
                       <div className="flex items-center">
                         <Button
-                          size="sm" color="warning" variant="flat"
+                          size="sm" color="primary" variant="flat"
                           isLoading={currentAction==='confirm' && (isPending || isLoading)}
                           isDisabled={ !isOwner }
                           onClick={() => onConfirm(item.txId)}

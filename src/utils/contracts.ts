@@ -553,6 +553,104 @@ export const crowdFundAbi = [
 ] as const
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// DutchAuction
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+export const dutchAuctionAbi = [
+  {
+    type: 'function',
+    inputs: [],
+    name: 'auctionId',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    name: 'auctions',
+    outputs: [
+      { name: 'nft', internalType: 'contract IERC721', type: 'address' },
+      { name: 'nftId', internalType: 'uint256', type: 'uint256' },
+      { name: 'seller', internalType: 'address payable', type: 'address' },
+      { name: 'startPrice', internalType: 'uint256', type: 'uint256' },
+      { name: 'endPrice', internalType: 'uint256', type: 'uint256' },
+      { name: 'startAt', internalType: 'uint32', type: 'uint32' },
+      { name: 'duration', internalType: 'uint32', type: 'uint32' },
+      { name: 'isActive', internalType: 'bool', type: 'bool' },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: '_id', internalType: 'uint256', type: 'uint256' }],
+    name: 'buy',
+    outputs: [],
+    stateMutability: 'payable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: '_nft', internalType: 'address', type: 'address' },
+      { name: '_nftId', internalType: 'uint256', type: 'uint256' },
+      { name: '_startPrice', internalType: 'uint256', type: 'uint256' },
+      { name: '_endPrice', internalType: 'uint256', type: 'uint256' },
+      { name: '_duration', internalType: 'uint32', type: 'uint32' },
+    ],
+    name: 'createAuction',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: '_id', internalType: 'uint256', type: 'uint256' }],
+    name: 'getPrice',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      { name: 'id', internalType: 'uint256', type: 'uint256', indexed: true },
+      {
+        name: 'seller',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+      {
+        name: 'startPrice',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+      { name: 'endAt', internalType: 'uint32', type: 'uint32', indexed: false },
+    ],
+    name: 'AuctionCreated',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      { name: 'id', internalType: 'uint256', type: 'uint256', indexed: true },
+      {
+        name: 'buyer',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+      {
+        name: 'DealPrice',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+    ],
+    name: 'AuctionSuccessful',
+  },
+] as const
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // ECDSA
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -1517,6 +1615,24 @@ export const ierc5267Abi = [
     stateMutability: 'view',
   },
   { type: 'event', anonymous: false, inputs: [], name: 'EIP712DomainChanged' },
+] as const
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// IERC721
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+export const ierc721Abi = [
+  {
+    type: 'function',
+    inputs: [
+      { name: '_from', internalType: 'address', type: 'address' },
+      { name: '_to', internalType: 'address', type: 'address' },
+      { name: '_nftId', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'transferFrom',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
 ] as const
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -3007,6 +3123,109 @@ export const useWatchCrowdFundUnpledgeEvent =
   })
 
 /**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link dutchAuctionAbi}__
+ */
+export const useReadDutchAuction = /*#__PURE__*/ createUseReadContract({
+  abi: dutchAuctionAbi,
+})
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link dutchAuctionAbi}__ and `functionName` set to `"auctionId"`
+ */
+export const useReadDutchAuctionAuctionId = /*#__PURE__*/ createUseReadContract(
+  { abi: dutchAuctionAbi, functionName: 'auctionId' },
+)
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link dutchAuctionAbi}__ and `functionName` set to `"auctions"`
+ */
+export const useReadDutchAuctionAuctions = /*#__PURE__*/ createUseReadContract({
+  abi: dutchAuctionAbi,
+  functionName: 'auctions',
+})
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link dutchAuctionAbi}__ and `functionName` set to `"getPrice"`
+ */
+export const useReadDutchAuctionGetPrice = /*#__PURE__*/ createUseReadContract({
+  abi: dutchAuctionAbi,
+  functionName: 'getPrice',
+})
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link dutchAuctionAbi}__
+ */
+export const useWriteDutchAuction = /*#__PURE__*/ createUseWriteContract({
+  abi: dutchAuctionAbi,
+})
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link dutchAuctionAbi}__ and `functionName` set to `"buy"`
+ */
+export const useWriteDutchAuctionBuy = /*#__PURE__*/ createUseWriteContract({
+  abi: dutchAuctionAbi,
+  functionName: 'buy',
+})
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link dutchAuctionAbi}__ and `functionName` set to `"createAuction"`
+ */
+export const useWriteDutchAuctionCreateAuction =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: dutchAuctionAbi,
+    functionName: 'createAuction',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link dutchAuctionAbi}__
+ */
+export const useSimulateDutchAuction = /*#__PURE__*/ createUseSimulateContract({
+  abi: dutchAuctionAbi,
+})
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link dutchAuctionAbi}__ and `functionName` set to `"buy"`
+ */
+export const useSimulateDutchAuctionBuy =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: dutchAuctionAbi,
+    functionName: 'buy',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link dutchAuctionAbi}__ and `functionName` set to `"createAuction"`
+ */
+export const useSimulateDutchAuctionCreateAuction =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: dutchAuctionAbi,
+    functionName: 'createAuction',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link dutchAuctionAbi}__
+ */
+export const useWatchDutchAuctionEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({ abi: dutchAuctionAbi })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link dutchAuctionAbi}__ and `eventName` set to `"AuctionCreated"`
+ */
+export const useWatchDutchAuctionAuctionCreatedEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: dutchAuctionAbi,
+    eventName: 'AuctionCreated',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link dutchAuctionAbi}__ and `eventName` set to `"AuctionSuccessful"`
+ */
+export const useWatchDutchAuctionAuctionSuccessfulEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: dutchAuctionAbi,
+    eventName: 'AuctionSuccessful',
+  })
+
+/**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link eip712Abi}__
  */
 export const useReadEip712 = /*#__PURE__*/ createUseReadContract({
@@ -3884,6 +4103,36 @@ export const useWatchIerc5267Eip712DomainChangedEvent =
   /*#__PURE__*/ createUseWatchContractEvent({
     abi: ierc5267Abi,
     eventName: 'EIP712DomainChanged',
+  })
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link ierc721Abi}__
+ */
+export const useWriteIerc721 = /*#__PURE__*/ createUseWriteContract({
+  abi: ierc721Abi,
+})
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link ierc721Abi}__ and `functionName` set to `"transferFrom"`
+ */
+export const useWriteIerc721TransferFrom = /*#__PURE__*/ createUseWriteContract(
+  { abi: ierc721Abi, functionName: 'transferFrom' },
+)
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link ierc721Abi}__
+ */
+export const useSimulateIerc721 = /*#__PURE__*/ createUseSimulateContract({
+  abi: ierc721Abi,
+})
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link ierc721Abi}__ and `functionName` set to `"transferFrom"`
+ */
+export const useSimulateIerc721TransferFrom =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: ierc721Abi,
+    functionName: 'transferFrom',
   })
 
 /**
