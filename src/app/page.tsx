@@ -38,7 +38,7 @@ function Page() {
           <span className="text-sm text-gray-600 ml-2">- Create new blockchain addresses easily</span>
         </li>
         <li>
-          <span>And more...</span>
+          <span>Coming soon...</span>
         </li>
       </ul>
 

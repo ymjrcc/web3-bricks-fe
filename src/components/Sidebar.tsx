@@ -12,7 +12,7 @@ const Sidebar = () => {
     { href: '/multi-sig-wallet', label: 'Multi-Sig Wallet', icon: Wallet },
     { href: '/merkle-airdrop', label: 'Merkle Airdrop', icon: Gift },
     { href: '/crowd-fund', label: 'Crowd Fund', icon: Boxes },
-    // { href: '/auction', label: 'Auction', icon: Gavel },
+    { href: '/auction', label: 'Auction', icon: Gavel },
     { href: '/address-generator', label: 'Address Generator', icon: Hash },
   ]
   const isCurrentPath = (href: string) => {
