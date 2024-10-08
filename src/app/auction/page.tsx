@@ -35,7 +35,9 @@ const Page = () => {
         <Tab key="dutch-auction" title="Dutch Auction">
           <DutchAuctionList contractAddress={dutchAuctionAddress} />
         </Tab>
-        <Tab key="english-auction" title="English Auction"></Tab>
+        <Tab key="english-auction" title="English Auction">
+          TODO
+        </Tab>
       </Tabs>
     </>
   )

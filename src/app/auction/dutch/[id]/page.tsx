@@ -3,7 +3,7 @@ import { Breadcrumbs, BreadcrumbItem, Button } from "@nextui-org/react"
 import { useReadDutchAuction } from "@/utils/contracts"
 import { useEffect, useState } from "react"
 import { erc721Abi, formatUnits } from "viem";
-import { useReadContract, useWaitForTransactionReceipt } from "wagmi";
+import { useAccount, useReadContract, useWaitForTransactionReceipt } from "wagmi";
 import NftCard from "../../components/NftCard";
 import { useWriteDutchAuction } from "@/utils/contracts";
 import toast from "react-hot-toast";
@@ -14,6 +14,8 @@ const Page = ({ params, searchParams }: { params: { id: string }, searchParams: 
   const contractAddress = searchParams.contract as `0x${string}`
   
   const [tokenMetadata, setTokenMetadata] = useState<any>(null)
+
+  const { address } = useAccount()
 
   const { data: hash, writeContractAsync: writeDutchAuction, isPending } = useWriteDutchAuction()
   const { isLoading, isSuccess } = useWaitForTransactionReceipt({ hash });
@@ -94,14 +96,17 @@ const Page = ({ params, searchParams }: { params: { id: string }, searchParams: 
       <div className="flex mt-4">
         <div className="flex-1 mr-4">
           <NftCard metadata={tokenMetadata} />
-          <Button
-            color="primary"
-            variant="flat"
-            className="mt-4 w-full"
-            isDisabled={!auction?.[7]}
-            isLoading={isPending || isLoading}
-            onClick={onBuy}
-          >Buy</Button>
+          {
+            auction?.[7] && auction?.[2] !== address && address && (
+              <Button
+                color="primary"
+                variant="flat"
+                className="mt-4 w-full"
+                isLoading={isPending || isLoading}
+                onClick={onBuy}
+              >Buy</Button>
+            )
+          }
         </div>
         <div className="flex-[2]">
           {auction && (
