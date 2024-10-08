@@ -3,16 +3,21 @@ import { Breadcrumbs, BreadcrumbItem, Button } from "@nextui-org/react"
 import { useReadDutchAuction } from "@/utils/contracts"
 import { useEffect, useState } from "react"
 import { erc721Abi, formatUnits } from "viem";
-import { useReadContract } from "wagmi";
+import { useReadContract, useWaitForTransactionReceipt } from "wagmi";
 import NftCard from "../../components/NftCard";
+import { useWriteDutchAuction } from "@/utils/contracts";
+import toast from "react-hot-toast";
 
 
-const contractAddress = '0x5FbDB2315678afecb367f032d93F642f64180aa3' as const
+const Page = ({ params, searchParams }: { params: { id: string }, searchParams: { contract: string } }) => {
 
-const Page = ({ params }: { params: { id: string } }) => {
-
-  const [tokenMetadata, setTokenMetadata] = useState<any>(null)
+  const contractAddress = searchParams.contract as `0x${string}`
   
+  const [tokenMetadata, setTokenMetadata] = useState<any>(null)
+
+  const { data: hash, writeContractAsync: writeDutchAuction, isPending } = useWriteDutchAuction()
+  const { isLoading, isSuccess } = useWaitForTransactionReceipt({ hash });
+
   const { data: auction, refetch: refetchAuction } = useReadDutchAuction({
     address: contractAddress,
     functionName: 'auctions',
@@ -34,6 +39,28 @@ const Page = ({ params }: { params: { id: string } }) => {
       enabled: !!auction?.[0] && !!auction?.[1]
     }
   })
+
+  const onBuy = async () => {
+    const _hash = await writeDutchAuction({
+      address: contractAddress,
+      functionName: 'buy',
+      value: currentPrice,
+      args: [BigInt(params.id)]
+    }, {
+      onSuccess: () => {
+        toast.success('Buy successfully')
+        refetchAuction()
+      },
+      onError: (error) => {
+        toast.error(error.message, {
+          style: {
+            wordBreak: 'break-all'
+          }
+        })
+      }
+    })
+    console.log(_hash)
+  }
 
   useEffect(() => {
     console.log(auction)
@@ -71,6 +98,9 @@ const Page = ({ params }: { params: { id: string } }) => {
             color="primary"
             variant="flat"
             className="mt-4 w-full"
+            isDisabled={!auction?.[7]}
+            isLoading={isPending || isLoading}
+            onClick={onBuy}
           >Buy</Button>
         </div>
         <div className="flex-[2]">
@@ -84,26 +114,40 @@ const Page = ({ params }: { params: { id: string } }) => {
               <li><strong className="text-gray-400 inline-block w-32">Start Time:</strong> {new Date(Number(auction[5]) * 1000).toLocaleString()}</li>
               <li><strong className="text-gray-400 inline-block w-32">End Time:</strong> {new Date(Number(auction[5]) * 1000 + Number(auction[6]) * 1000).toLocaleString()}</li>
               <li><strong className="text-gray-400 inline-block w-32">Active:</strong> {auction[7] ? 'Yes' : 'No'}</li>
-              <li>
-                <strong className="text-gray-400 inline-block w-32">Current Price:</strong>
-                <span className="font-bold text-xl text-green-500">
-                  {currentPrice ? `${formatUnits(currentPrice, 18)} ETH` : 'Loading...'}
-                </span>
-                <Button 
-                  size="sm"
-                  variant="flat"
-                  color="success"
-                  className="ml-2" 
-                  onClick={() => refetchPrice()}
-                  isLoading={isLoadingPrice}
-                >Refresh</Button>
-            </li>
+              {
+                auction?.[7] ? (
+                  <li>
+                    <strong className="text-gray-400 inline-block w-32">Current Price:</strong>
+                    <span className="font-bold text-xl text-orange-500">
+                      {currentPrice ? `${formatUnits(currentPrice, 18)} ETH` : 'Loading...'}
+                    </span>
+                    <Button
+                      size="sm"
+                      variant="flat"
+                      color="warning"
+                      className="ml-2"
+                      onClick={() => refetchPrice()}
+                      isLoading={isLoadingPrice}
+                    >Refresh</Button>
+                  </li>
+                ) : (
+                  <>
+                    <li>
+                      <strong className="text-gray-400 inline-block w-32">Buyer:</strong> 
+                      {auction?.[8]}
+                    </li>
+                    <li>
+                      <strong className="text-gray-400 inline-block w-32">Deal Price:</strong>
+                      <span className="font-bold text-xl text-green-500">
+                        {auction?.[9] && `${formatUnits(auction[9], 18)} ETH`}
+                      </span>
+                    </li>
+                  </>
+                )
+              }
             </ul>
           )}
         </div>
-      </div>
-      <div className="mt-4">
-
       </div>
     </div>
   )

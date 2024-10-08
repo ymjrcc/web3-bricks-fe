@@ -34,6 +34,10 @@ function Page() {
           <span className="text-sm text-gray-600 ml-2">- Launch and manage fundraising campaigns</span>
         </li>
         <li>
+          <Link href="/auction" className="text-orange-600 hover:underline">Auction</Link>
+          <span className="text-sm text-gray-600 ml-2">- Create and participate in decentralized auctions</span>
+        </li>
+        <li>
           <Link href="/address-generator" className="text-orange-600 hover:underline">Address Generator</Link>
           <span className="text-sm text-gray-600 ml-2">- Create new blockchain addresses easily</span>
         </li>

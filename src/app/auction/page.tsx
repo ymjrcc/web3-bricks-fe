@@ -2,7 +2,7 @@
 import { Tabs, Tab } from "@nextui-org/react";
 import DutchAuctionList from "./components/DutchAuctionList";
 
-const dutchAuctionAddress = '0x5FbDB2315678afecb367f032d93F642f64180aa3' as const
+const dutchAuctionAddress = '0xB1478022436d48Ef12B636cB0C5B123A9dcd06AE' as const
 
 const info = [
   { key: 'Name', value: 'Auction' },

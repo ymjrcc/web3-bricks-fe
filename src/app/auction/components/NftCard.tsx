@@ -1,7 +1,10 @@
+import { Spinner } from "@nextui-org/react"
+
 const NftCard = ({ metadata }: { metadata: any }) => {
   if (!metadata) {
-    return <div className="bg-gray-100 h-64 flex items-center justify-center">
-      <p>Loading NFT data...</p>
+    return <div className="bg-gray-100 h-64 flex flex-col items-center justify-center">
+      <Spinner color="primary" />
+      <p className="text-gray-400 mt-4">Loading NFT data...</p>
     </div>
   }
   return (

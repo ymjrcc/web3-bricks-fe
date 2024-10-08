@@ -193,7 +193,7 @@ const Page = () => {
       </ul>
       <div className="flex justify-between items-center">
         <div className='text-xl font-bold  text-gray-400 mb-2 mt-4'>Campaigns List:</div>
-        <Button size="sm" color="warning" variant="flat" onClick={onCreate}>Create New Campaign</Button>
+        <Button size="sm" color="warning" variant="flat" onClick={onCreate}>Create Campaign</Button>
       </div>
       <Table aria-label="Example static collection table">
         <TableHeader>
@@ -259,7 +259,7 @@ const Page = () => {
         <ModalContent>
           {(onClose) => (
             <>
-              <ModalHeader className="flex flex-col gap-1">Create New Campaign</ModalHeader>
+              <ModalHeader className="flex flex-col gap-1">Create Campaign</ModalHeader>
               <ModalBody>
                 <Input
                   type="number" variant="bordered" label="Goal"
